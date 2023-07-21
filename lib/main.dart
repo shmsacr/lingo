@@ -4,7 +4,7 @@ import 'package:lingo/view/screens/dashboard.dart';
 import 'package:lingo/view/theme/app_theme.dart';
 
 void main() {
-  runApp(ProviderScope(child: MyApp()));
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends ConsumerWidget {
@@ -14,12 +14,12 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return MaterialApp(
+    return MaterialApp(      
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
-      home: DashboardScreen(),
+      home: const DashboardScreen(),
     );
   }
 }

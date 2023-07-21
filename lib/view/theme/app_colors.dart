@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
-class AppColors {
+
+@immutable
+final class AppColors {
+  const AppColors._();
   static const Color primary = Color(0xff105694);
   static const Color primaryContainer = Color(0xffd0e4ff);
   static const Color secondary = Color(0xff9e001d);
@@ -15,3 +18,4 @@ class AppColors {
   static const Color cardDark = Color(0xFF303334);
   static const Color cardLight = Color(0xFFF9FAFE);
 }
+

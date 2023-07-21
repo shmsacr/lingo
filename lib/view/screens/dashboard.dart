@@ -2,10 +2,10 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lingo/controller/dashboard_controller.dart';
+import 'package:lingo/view/screens/quiz/Quiz_Screen.dart';
 
 import 'home/home_screen.dart';
 import 'profile/profile_screen.dart';
-import 'test/TestScreen.dart';
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({
@@ -16,7 +16,7 @@ class DashboardScreen extends ConsumerWidget {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   final List<Widget> _screens = const <Widget>[
     HomeScreen(),
-    TestScreen(),
+    QuizScreen(),
     ProfileScreen(),
   ];
 
@@ -24,6 +24,7 @@ class DashboardScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final index = ref.watch(dashboardIndexProvider);
     return Scaffold(
+      appBar: AppBar(),
       body: SafeArea(
         child: _screens.elementAt(index),
       ),
