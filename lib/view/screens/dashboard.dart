@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lingo/controller/dashboard_controller.dart';
 import 'package:lingo/view/screens/quiz/Quiz_Screen.dart';
 
-import '../theme/app_colors.dart';
 import 'home/home_screen.dart';
 import 'profile/profile_screen.dart';
 
@@ -35,16 +34,16 @@ class DashboardScreen extends ConsumerWidget {
           CurvedNavigationBar(
             height: 44,
             items: const [
-              Icon(Icons.home, color: AppColors.primaryContainer),
-              Icon(Icons.quiz, color: AppColors.primaryContainer),
-              Icon(Icons.person, color: AppColors.primaryContainer),
+              Icon(Icons.home, color: Colors.black),
+              Icon(Icons.quiz, color: Colors.black),
+              Icon(Icons.person, color: Colors.black),
             ],
             index: index,
-            color: AppColors.tertiary,
+            color: Colors.white,
             backgroundColor:
                 MediaQuery.of(context).platformBrightness == Brightness.dark
                     ? const Color(0xff101d28)
-                    : const Color(0xffb7c6d8),
+                    : const Color(0xf8f8f8),
             onTap: (int newIndex) => ref
                 .read(dashboardIndexProvider.notifier)
                 .update((state) => newIndex),
@@ -72,7 +71,7 @@ Widget _label(String label) => Expanded(
       child: Center(
         child: Text(
           label,
-          style: const TextStyle(color: AppColors.primaryContainer),
+          style: const TextStyle(color: Colors.black),
         ),
       ),
     );
