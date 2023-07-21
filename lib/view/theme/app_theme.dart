@@ -4,7 +4,11 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'app_colors.dart';
 
-class AppTheme {
+
+@immutable
+final class AppTheme {
+  const AppTheme._(); 
+  
   static final light = FlexThemeData.light(
     colors: const FlexSchemeColor(
       primary: AppColors.primary,
