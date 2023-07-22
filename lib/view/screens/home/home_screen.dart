@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:kartal/kartal.dart';
 import 'package:lingo/view/widget/custom_text_widget.dart';
+import 'package:lingo/view/screens/home/add_word_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({

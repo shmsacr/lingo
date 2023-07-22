@@ -16,6 +16,10 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       theme: AppTheme.light,
+    return MaterialApp(      
+      theme: AppTheme.light.copyWith(
+        scaffoldBackgroundColor: Colors.white,
+      ),
       darkTheme: AppTheme.dark,
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
