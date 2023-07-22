@@ -15,7 +15,9 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(      
-      theme: AppTheme.light,
+      theme: AppTheme.light.copyWith(
+        scaffoldBackgroundColor: Colors.white,
+      ),
       darkTheme: AppTheme.dark,
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
