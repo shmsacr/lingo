@@ -39,11 +39,11 @@ class DashboardScreen extends ConsumerWidget {
               Icon(Icons.person, color: Colors.black),
             ],
             index: index,
-            color: Colors.white,
+            color: Color(0x5F5F5F5F),
             backgroundColor:
                 MediaQuery.of(context).platformBrightness == Brightness.dark
-                    ? const Color(0xff101d28)
-                    : const Color(0xf8f8f8),
+                    ? const Color(0x00000000)
+                    : const Color(0x00000000),
             onTap: (int newIndex) => ref
                 .read(dashboardIndexProvider.notifier)
                 .update((state) => newIndex),
