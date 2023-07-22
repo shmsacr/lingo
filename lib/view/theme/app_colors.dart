@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 @immutable
 final class AppColors {
   const AppColors._();
@@ -17,5 +16,10 @@ final class AppColors {
   static const Color accent = Color(0xFFD6755B);
   static const Color cardDark = Color(0xFF303334);
   static const Color cardLight = Color(0xFFF9FAFE);
-}
 
+  static const Color green = Color.fromARGB(255, 3, 138, 59);
+  static const Color red = Color(0xFFD50000);
+  static const Color blue = Color(0xFF2962FF);
+
+  static const Color purple = Color(0xFF6200EA);
+}

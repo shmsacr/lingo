@@ -24,7 +24,6 @@ class DashboardScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final index = ref.watch(dashboardIndexProvider);
     return Scaffold(
-      appBar: AppBar(),
       body: SafeArea(
         child: _screens.elementAt(index),
       ),
