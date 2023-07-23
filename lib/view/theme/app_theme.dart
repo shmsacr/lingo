@@ -4,11 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'app_colors.dart';
 
-
 @immutable
 final class AppTheme {
-  const AppTheme._(); 
-  
+  const AppTheme._();
+
   static final light = FlexThemeData.light(
     colors: const FlexSchemeColor(
       primary: AppColors.primary,
@@ -57,7 +56,5 @@ final class AppTheme {
     ),
     visualDensity: FlexColorScheme.comfortablePlatformDensity,
     useMaterial3: true,
-    // To use the playground font, add GoogleFonts package and uncomment
-    // fontFamily: GoogleFonts.notoSans().fontFamily,
   );
 }
