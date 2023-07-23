@@ -4,8 +4,8 @@ part 'word_model.freezed.dart';
 part 'word_model.g.dart';
 
 @freezed
+@JsonSerializable(explicitToJson: true)
 class Words with _$Words {
-  @JsonSerializable(explicitToJson: true)
   const factory Words({
     required final String id,
     required final String word,

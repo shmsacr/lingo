@@ -5,23 +5,28 @@ import 'package:lingo/view/screens/profile/profile_screen.dart';
 import 'package:lingo/view/screens/quiz/Quiz_Screen.dart';
 
 class Router {
-  static const String dashboard = '/';
-  static const String home = '/home';
-  static const String quiz = '/quiz';
-  static const String profile = '/profile';
+  static const String dashboard = '';
+  static const String home = 'home';
+  static const String quiz = 'quiz';
+  static const String profile = 'profile';
+  static const String trueAndFalse = 'trueAndFalse';
 
   static Route<dynamic> generateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
       case '/':
         return MaterialPageRoute(builder: (_) => const DashboardScreen());
-      case '/home':
+      case 'home':
         return MaterialPageRoute(builder: (_) => const HomeScreen());
 
-      case '/quiz':
+      case 'quiz':
         return MaterialPageRoute(builder: (_) => const QuizScreen());
 
-      case '/profile':
+      case 'profile':
         return MaterialPageRoute(builder: (_) => const ProfileScreen());
+
+        case 'trueAndFalse':
+        return MaterialPageRoute(builder: (_) => const QuizScreen());
+        
 
       default:
         return MaterialPageRoute(builder: (_) => const HomeScreen());

@@ -4,8 +4,14 @@ import 'package:flutter/material.dart';
 final class StringConst {
   StringConst._();
 
-  //quizpage
 
+
+
+  //general
+  static const String appNameTitle = 'Lingo Kelime Defteri';
+
+  //quizpage
+  
   static const String quiz = 'Quiz';
   static const String quizAppName = 'Lingo Quiz Challenge';
   static const String multipleChoice = 'Çoktan Seçmeli';
@@ -13,4 +19,6 @@ final class StringConst {
   static const String writingPractice = 'Yazma Alıştırması';
   static const String mixedPractice = 'Karışık Alıştırma';
 
+
+  
 }
