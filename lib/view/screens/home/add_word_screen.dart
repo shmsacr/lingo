@@ -4,7 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../model/word_model.dart';
+import '../../../controller/words_controller.dart';
+import '../../../data/model/word_model.dart';
 
 class AddWord extends ConsumerStatefulWidget {
   const AddWord({
@@ -20,6 +21,7 @@ class _AddWordState extends ConsumerState<AddWord> {
   final uuid = Uuid().v1();
   @override
   Widget build(BuildContext context) {
+    final wordCt = ref.read(wordListNotifier.notifier);
     return Scaffold(
       appBar: AppBar(
         title: Text("Yeni Kelime Ekle"),
@@ -57,13 +59,11 @@ class _AddWordState extends ConsumerState<AddWord> {
                   ),
                   const SizedBox(height: 16.0),
                   FormBuilderTextField(
-                    initialValue: "",
                     name: "spouse",
                     decoration: const InputDecoration(labelText: 'Eş Anlamı'),
                   ),
                   const SizedBox(height: 16.0),
                   FormBuilderTextField(
-                    initialValue: "",
                     name: "sentence",
                     decoration: const InputDecoration(
                         labelText: 'Bir cumle icinde kullanımı'),
@@ -71,21 +71,36 @@ class _AddWordState extends ConsumerState<AddWord> {
                   const SizedBox(height: 25.0),
                   MaterialButton(
                     color: Colors.green,
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.saveAndValidate()) {
                         final Words words = Words.fromJson({
                           "word": _formKey.currentState!.value["word"],
                           "means": _formKey.currentState!.value["means"],
-                          "spouse": _formKey.currentState!.value["spouse"],
-                          "sentence": _formKey.currentState!.value["sentence"],
+                          "spouse": _formKey.currentState?.value["spouse"],
+                          "sentence": _formKey.currentState?.value["sentence"],
                           "id": uuid,
                         });
                         print(_formKey.currentState!.value["word"]);
                         print(_formKey.currentState!.value["spouse"]);
+                        try {
+                          wordCt.addWord(words);
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content:
+                                      Text("Kelimesi eklendi: ${words.word}")),
+                            );
+                          }
+                        } catch (e) {
+                          debugPrint(e.toString());
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(content: Text("$e")));
+                        }
                       } else {
                         debugPrint("Error");
                         return;
                       }
+                      Navigator.pop(context);
                     },
                     child: Icon(
                       Icons.check,
