@@ -13,7 +13,7 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final wordListStream = ref.watch(wordListNotifier.notifier).getAllWords();
+    final wordList = ref.watch(wordListNotifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -36,108 +36,94 @@ class HomeScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: FutureBuilder<List<Words>>(
-        future: wordListStream,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text("Hata oluştu: ${snapshot.error}"),
-            );
-          } else {
-            final wordList = snapshot.data;
-            if (wordList == null || wordList.isEmpty) {
-              return Center(
-                child: Text("Kelime Ekleyin"),
-              );
-            } else {
-              return Padding(
-                padding: context.padding.onlyLeftNormal,
-                child: SizedBox(
-                  width: context.general.mediaQuery.size.width * 0.9,
-                  child: ListView.builder(
-                    itemCount: wordList.length,
-                    itemBuilder: (context, index) {
-                      final isdata = wordList[index];
-                      return Padding(
-                        padding: context.padding.low,
-                        child: Card(
-                          elevation: 2,
-                          child: Slidable(
-                            endActionPane: ActionPane(
-                              motion: ScrollMotion(),
-                              children: [
-                                SlidableAction(
-                                  onPressed: (context) {},
-                                  backgroundColor: Colors.red,
-                                  icon: Icons.delete,
+      body: wordList.isEmpty
+          ? Center(child: Text("Kelime ekleyin"))
+          : Padding(
+              padding: context.padding.onlyLeftNormal,
+              child: SizedBox(
+                width: context.general.mediaQuery.size.width * 0.9,
+                child: ListView.builder(
+                  itemCount: wordList.length,
+                  itemBuilder: (context, index) {
+                    final isdata = wordList[index];
+                    return Padding(
+                      padding: context.padding.low,
+                      child: Card(
+                        elevation: 2,
+                        child: Slidable(
+                          endActionPane: ActionPane(
+                            motion: ScrollMotion(),
+                            children: [
+                              SlidableAction(
+                                onPressed: (context) {
+                                  ref
+                                      .watch(wordListNotifier.notifier)
+                                      .deleteWord(isdata);
+
+                                  print(wordList.length);
+                                },
+                                backgroundColor: Colors.red,
+                                icon: Icons.delete,
+                              ),
+                              SlidableAction(
+                                onPressed: (context) {},
+                                backgroundColor: Colors.orange,
+                                icon: Icons.edit,
+                              ),
+                            ],
+                          ),
+                          child: SizedBox(
+                            child: ListTile(
+                              titleAlignment: ListTileTitleAlignment.center,
+                              onTap: () => _showDetail(context, isdata),
+                              leading: IconButton(
+                                onPressed: () async {},
+                                icon: Icon(
+                                  Icons.volume_up_rounded,
+                                  color: Colors.black,
                                 ),
-                                SlidableAction(
-                                  onPressed: (context) {},
-                                  backgroundColor: Colors.orange,
-                                  icon: Icons.edit,
-                                ),
-                              ],
-                            ),
-                            child: SizedBox(
-                              child: ListTile(
-                                titleAlignment: ListTileTitleAlignment.center,
-                                onTap: () => _showDetail(context, isdata),
-                                leading: IconButton(
-                                  onPressed: () async {},
-                                  icon: Icon(
-                                    Icons.volume_up_rounded,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                title: Center(
-                                    child: CustomTextWidget(text: isdata.word)),
-                                subtitle: Center(
-                                  child: CustomTextWidget(
-                                      text: isdata.means,
-                                      fontWeight: FontWeight.w100),
-                                ),
+                              ),
+                              title: Center(
+                                  child: CustomTextWidget(text: isdata.word)),
+                              subtitle: Center(
+                                child: CustomTextWidget(
+                                    text: isdata.means,
+                                    fontWeight: FontWeight.w100),
                               ),
                             ),
                           ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
-              );
-            }
-          }
-        },
-      ),
+              ),
+            ),
     );
   }
-}
 
-Future<void> _showDetail(BuildContext context, Words words) async {
-  return await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        elevation: 20,
-        title: ListTile(
-          title: Text(words.word),
-          subtitle: Text(words.means),
-        ),
-        content: ListTile(
-          title: Text("Eş Anlamlısı"),
-          subtitle: Text(words.spouse ?? "Eş anlam ekleyin"),
-        ),
-        actions: [
-          ListTile(
-            title: Text("Cumle içinde kullanımı"),
-            subtitle: Text(words.spouse ?? "Cumle ekleyin"),
+  Future<void> _showDetail(BuildContext context, Words words) async {
+    return await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          elevation: 20,
+          title: ListTile(
+            title: Text(words.word),
+            subtitle: Text(words.means),
           ),
-        ],
-      );
-    },
-  );
+          content: ListTile(
+            title: Text("Eş Anlamlısı"),
+            subtitle: Text(words.spouse ?? "Eş anlam ekleyin"),
+          ),
+          actions: [
+            ListTile(
+              title: Text("Cumle içinde kullanımı"),
+              subtitle: Text(words.spouse ?? "Cumle ekleyin"),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
