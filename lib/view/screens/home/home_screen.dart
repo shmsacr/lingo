@@ -24,7 +24,7 @@ class HomeScreen extends ConsumerWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AddWord()),
+              MaterialPageRoute<AddWord>(builder: (context) => AddWord()),
             );
           },
           icon: Icon(Icons.add),
@@ -66,7 +66,15 @@ class HomeScreen extends ConsumerWidget {
                                 icon: Icons.delete,
                               ),
                               SlidableAction(
-                                onPressed: (context) {},
+                                onPressed: (context) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute<AddWord>(
+                                        builder: (context) => AddWord(
+                                              myWords: isdata,
+                                            )),
+                                  );
+                                },
                                 backgroundColor: Colors.orange,
                                 icon: Icons.edit,
                               ),

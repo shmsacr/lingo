@@ -8,7 +8,9 @@ import '../../../controller/words_controller.dart';
 import '../../../data/model/word_model.dart';
 
 class AddWord extends ConsumerStatefulWidget {
+  final Words? myWords;
   const AddWord({
+    this.myWords,
     Key? key,
   }) : super(key: key);
 
@@ -19,6 +21,13 @@ class AddWord extends ConsumerStatefulWidget {
 class _AddWordState extends ConsumerState<AddWord> {
   final _formKey = GlobalKey<FormBuilderState>();
   final uuid = Uuid().v1();
+
+  @override
+  void dispose() {
+    _formKey.currentState?.reset();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final wordCt = ref.read(wordListNotifier.notifier);
@@ -38,6 +47,7 @@ class _AddWordState extends ConsumerState<AddWord> {
                 children: [
                   FormBuilderTextField(
                     name: "word",
+                    initialValue: widget.myWords?.word,
                     decoration: const InputDecoration(labelText: 'Kelime'),
                     validator: FormBuilderValidators.compose(
                       [
@@ -49,6 +59,7 @@ class _AddWordState extends ConsumerState<AddWord> {
                   const SizedBox(height: 16.0),
                   FormBuilderTextField(
                     name: "means",
+                    initialValue: widget.myWords?.means,
                     decoration: const InputDecoration(labelText: 'Karşılığı'),
                     validator: FormBuilderValidators.compose(
                       [
@@ -60,11 +71,13 @@ class _AddWordState extends ConsumerState<AddWord> {
                   const SizedBox(height: 16.0),
                   FormBuilderTextField(
                     name: "spouse",
+                    initialValue: widget.myWords?.spouse,
                     decoration: const InputDecoration(labelText: 'Eş Anlamı'),
                   ),
                   const SizedBox(height: 16.0),
                   FormBuilderTextField(
                     name: "sentence",
+                    initialValue: widget.myWords?.sentence,
                     decoration: const InputDecoration(
                         labelText: 'Bir cumle icinde kullanımı'),
                   ),
@@ -78,7 +91,9 @@ class _AddWordState extends ConsumerState<AddWord> {
                           "means": _formKey.currentState!.value["means"],
                           "spouse": _formKey.currentState?.value["spouse"],
                           "sentence": _formKey.currentState?.value["sentence"],
-                          "id": uuid,
+                          "id": widget.myWords?.id == null
+                              ? uuid
+                              : widget.myWords!.id
                         });
                         print(_formKey.currentState!.value["word"]);
                         print(_formKey.currentState!.value["spouse"]);
