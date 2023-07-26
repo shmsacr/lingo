@@ -30,7 +30,7 @@ class _AddWordState extends ConsumerState<AddWord> {
 
   @override
   Widget build(BuildContext context) {
-    final wordCt = ref.read(wordListNotifier.notifier);
+    final wordCt = ref.read(wordListNotifierProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         title: Text("Yeni Kelime Ekle"),
