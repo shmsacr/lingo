@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../controller/words_controller.dart';
@@ -67,6 +68,12 @@ class _AddWordState extends ConsumerState<AddWord> {
                             errorText: "Bu alan boş bırakılamaz."),
                       ],
                     ),
+                    inputFormatters: [
+                      MaskTextInputFormatter(
+                          mask:
+                              "*********************************************************",
+                          filter: {"*": RegExp('[a-zA-ZğüşıöçĞÜŞİÖÇ ]')}),
+                    ],
                   ),
                   const SizedBox(height: 16.0),
                   FormBuilderTextField(
