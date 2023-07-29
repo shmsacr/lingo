@@ -4,6 +4,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:kartal/kartal.dart';
 import 'package:lingo/controller/words_controller.dart';
 import 'package:lingo/view/screens/home/add_word_screen.dart';
+import 'package:lingo/view/widget/custom_search_dekegate.dart';
+import 'package:search_page/search_page.dart';
 
 import '../../../data/model/word_model.dart';
 import '../../widget/custom_text_widget.dart';
@@ -13,8 +15,8 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final wordList = ref.watch(wordListNotifier);
-
+    final wordList = ref.watch(wordListNotifierProvider);
+    final seacrhList = ref.watch(wordListNotifierProvider);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0x5F5F5F5F),
@@ -31,7 +33,19 @@ class HomeScreen extends ConsumerWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => showSearch(
+                context: context,
+                delegate: SearchPage(
+                  onQueryUpdate: print,
+                  items: seacrhList,
+                  searchLabel: 'Search people',
+                  suggestion: const Center(
+                    child: Text('Filter people by name, surname or age'),
+                  ),
+                  builder: (searchWord) =>
+                      buildPadding(context, ref, searchWord),
+                  filter: (searchWord) => [searchWord.means, searchWord.word],
+                )),
             icon: Icon(Icons.search),
           ),
         ],
@@ -46,67 +60,71 @@ class HomeScreen extends ConsumerWidget {
                   itemCount: wordList.length,
                   itemBuilder: (context, index) {
                     final isdata = wordList[index];
-                    return Padding(
-                      padding: context.padding.low,
-                      child: Card(
-                        elevation: 2,
-                        child: Slidable(
-                          endActionPane: ActionPane(
-                            motion: ScrollMotion(),
-                            children: [
-                              SlidableAction(
-                                onPressed: (context) {
-                                  ref
-                                      .watch(wordListNotifier.notifier)
-                                      .deleteWord(isdata);
-
-                                  print(wordList.length);
-                                },
-                                backgroundColor: Colors.red,
-                                icon: Icons.delete,
-                              ),
-                              SlidableAction(
-                                onPressed: (context) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute<AddWord>(
-                                        builder: (context) => AddWord(
-                                              myWords: isdata,
-                                            )),
-                                  );
-                                },
-                                backgroundColor: Colors.orange,
-                                icon: Icons.edit,
-                              ),
-                            ],
-                          ),
-                          child: SizedBox(
-                            child: ListTile(
-                              titleAlignment: ListTileTitleAlignment.center,
-                              onTap: () => _showDetail(context, isdata),
-                              leading: IconButton(
-                                onPressed: () async {},
-                                icon: Icon(
-                                  Icons.volume_up_rounded,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              title: Center(
-                                  child: CustomTextWidget(text: isdata.word)),
-                              subtitle: Center(
-                                child: CustomTextWidget(
-                                    text: isdata.means,
-                                    fontWeight: FontWeight.w100),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
+                    return buildPadding(context, ref, isdata);
                   },
                 ),
               ),
             ),
+    );
+  }
+
+  Padding buildPadding(BuildContext context, WidgetRef ref, Words isdata) {
+    return Padding(
+      padding: context.padding.low,
+      child: Card(
+        elevation: 2,
+        child: Slidable(
+          endActionPane: ActionPane(
+            motion: ScrollMotion(),
+            children: [
+              SlidableAction(
+                onPressed: (context) {
+                  ref
+                      .read(wordListNotifierProvider.notifier)
+                      .deleteWord(isdata);
+                },
+                backgroundColor: Colors.red,
+                icon: Icons.delete,
+              ),
+              SlidableAction(
+                onPressed: (context) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute<AddWord>(
+                        builder: (context) => AddWord(
+                              myWords: isdata,
+                            )),
+                  );
+                },
+                backgroundColor: Colors.orange,
+                icon: Icons.edit,
+              ),
+            ],
+          ),
+          child: SizedBox(
+            child: ListTile(
+              titleAlignment: ListTileTitleAlignment.center,
+              onTap: () => _showDetail(context, isdata),
+              leading: IconButton(
+                onPressed: () async {
+                  ref
+                      .read(wordListNotifierProvider.notifier)
+                      .speak(isdata.word);
+                },
+                icon: Icon(
+                  Icons.volume_up_rounded,
+                  color: Colors.black,
+                ),
+              ),
+              title: Center(child: CustomTextWidget(text: isdata.word)),
+              subtitle: Center(
+                child: CustomTextWidget(
+                    text: isdata.means, fontWeight: FontWeight.w100),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -133,5 +151,9 @@ class HomeScreen extends ConsumerWidget {
         );
       },
     );
+  }
+
+  void _showSearchPage(BuildContext context, WidgetRef ref) {
+    showSearch(context: context, delegate: CustomSearchDelegate(ref: ref));
   }
 }
