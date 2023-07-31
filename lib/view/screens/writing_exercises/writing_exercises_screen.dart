@@ -1,20 +1,59 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../controller/writing_exercise_controller.dart';
 
-class WritingExercisesScreen extends ConsumerWidget {
+class WritingExercisesScreen extends ConsumerStatefulWidget {
   const WritingExercisesScreen({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final _controller = ref.watch(userTextProvider.notifier);
+  ConsumerState createState() => _WritingExercisesScreenState();
+}
+
+class _WritingExercisesScreenState
+    extends ConsumerState<WritingExercisesScreen> {
+  final myController = TextEditingController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    myController.addListener(changeColor);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    myController.dispose();
+    super.dispose();
+  }
+
+  void changeColor() {
+    final randomWord = ref.watch(randomWordProvider);
+    final randomIndex = ref.watch(randomIndexProvider.notifier);
+
+    String text = randomIndex.state == 0
+        ? randomWord.value!.word
+        : randomWord.value!.means;
+    print("${myController.text} -- $text");
+    print(text);
+    if (myController.text.isEmpty) {
+      ref.watch(fillColorProvider.notifier).state = Colors.blueGrey;
+    } else if (myController.text.toLowerCase() == text.toLowerCase()) {
+      ref.refresh(fillColorProvider.notifier).state = Colors.greenAccent;
+    } else {
+      ref.refresh(fillColorProvider.notifier).state = Colors.red;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final randomWord = ref.watch(randomWordProvider);
     final fillerColor = ref.watch(fillColorProvider.notifier);
     final randomIndex = ref.watch(randomIndexProvider.notifier);
-
     return Scaffold(
         appBar: AppBar(
           title: Text('Kelime Egzersizi'),
@@ -40,6 +79,7 @@ class WritingExercisesScreen extends ConsumerWidget {
                       ),
                       SizedBox(height: 16),
                       TextField(
+                        controller: myController,
                         decoration: InputDecoration(
                             filled: true,
                             fillColor: fillerColor.state,
@@ -47,27 +87,16 @@ class WritingExercisesScreen extends ConsumerWidget {
                               borderRadius: BorderRadius.circular(10),
                               borderSide: BorderSide.none,
                             )),
-                        onChanged: (value) {
-                          String text =
-                              randomIndex.state == 0 ? data.word : data.means;
-                          print("$text - $value");
-                          if (value == text) {
-                            ref.refresh(fillColorProvider.notifier).state =
-                                Colors.greenAccent;
-                          } else {
-                            ref.refresh(fillColorProvider.notifier).state =
-                                Colors.redAccent;
-                          }
-                        },
                       ),
                       SizedBox(height: 16),
                       ElevatedButton(
                         onPressed: () {
-                          ref.refresh(randomWordProvider);
-                          ref.refresh(randomIndexProvider);
-                          fillerColor.state = Colors.blue.shade100;
-
+                          randomIndex.state = Random().nextInt(2);
                           print(randomIndex.state);
+                          ref.refresh(randomWordProvider);
+
+                          myController.clear();
+
                           // Cevap kontrolü ve sonraki kelimeye geçiş işlemleri burada yapılabilir.
                         },
                         child: Text('Sonraki Kelime'),
