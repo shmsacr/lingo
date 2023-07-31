@@ -8,6 +8,7 @@ import 'package:lingo/view/screens/quiz/quiz_Screen.dart';
 
 import '../../../theme/app_colors.dart';
 
+
 mixin QuizScreenMixin {
   List<Widget> getCards() {
     return _quizScreenItem
