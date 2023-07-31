@@ -1,72 +1,43 @@
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:lingo/data/model/word_model.dart';
 import 'package:lingo/data/services/local_storage.dart';
 
-final wordListNotifier = StateNotifierProvider<WordListNotifier, WordListState>(
+final wordListNotifierProvider =
+    StateNotifierProvider<WordListNotifier, List<Words>>(
   (ref) => WordListNotifier(),
 );
 
-
-
- class WordListNotifier extends StateNotifier<WordListState> {
-  WordListNotifier() : super(WordListState(words: []));
-
-  List<Words>? _allWords = [];
-  bool isLoading = false;
-  List<Words>? get allWords => _allWords;
-
-  final localStorage = HiveLocalStroge();
-
-  Future<void> fetchAndLoading() async {
-    state = state.copyWith(isLoading: true);
-    await getAllWords();
-    state = state.copyWith(isLoading: false);
+class WordListNotifier extends StateNotifier<List<Words>> {
+  WordListNotifier() : super([]) {
+    getAllWords();
   }
 
   Future<List<Words>> getAllWords() async {
+    final localStorage = HiveLocalStroge();
     final words = await localStorage.getAllWords();
-
-    if (words.isNotEmpty) {
-      _allWords = words;
-    } else {
-      return [];
-    }
-
-    state = state.copyWith(words: words);
-    return words;
+    state = words;
+    return state;
   }
 
-  void addWord(Words word) async {
+  Future<void> addWord(Words word) async {
+    final localStorage = HiveLocalStroge();
     await localStorage.addWord(word: word);
-    _allWords?.add(word);
-    state = state.copyWith(words: _allWords);
+    await getAllWords();
   }
 
-  void deleteWord(Words word) async {
-    await localStorage.deleteWord(word: word);
-    _allWords?.remove(word);
-    state = state.copyWith(words: _allWords);
+  Future<void> deleteWord(Words word) async {
+    final localStorage = HiveLocalStroge();
+    final success = await localStorage.deleteWord(word: word);
+    if (success) {
+      state = state.where((w) => w.id != word.id).toList();
+    }
   }
-}
 
-class WordListState {
-  final List<Words>? words;
-  final bool? isLoading;
-
-  WordListState({
-    this.words,
-    this.isLoading,
-  });
-
-  WordListState copyWith({
-    List<Words>? words,
-    bool? isLoading,
-  }) {
-    return WordListState(
-      words: words ?? this.words,
-      isLoading: isLoading,
-    );
+  void speak(String text) async {
+    final sountTTS = FlutterTts();
+    await sountTTS.setLanguage("en-US");
+    await sountTTS.setPitch(1);
+    await sountTTS.speak(text);
   }
 }

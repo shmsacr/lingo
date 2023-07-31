@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:lingo/controller/riverpod/words_controller.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../controller/riverpod/words_controller.dart';
 import '../../../data/model/word_model.dart';
 
 class AddWord extends ConsumerStatefulWidget {
+  final Words? myWords;
   const AddWord({
+    this.myWords,
     Key? key,
   }) : super(key: key);
 
@@ -19,9 +22,16 @@ class AddWord extends ConsumerStatefulWidget {
 class _AddWordState extends ConsumerState<AddWord> {
   final _formKey = GlobalKey<FormBuilderState>();
   final uuid = Uuid().v1();
+
+  @override
+  void dispose() {
+    _formKey.currentState?.reset();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final wordCt = ref.read(wordListNotifier.notifier);
+    final wordCt = ref.read(wordListNotifierProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         title: Text("Yeni Kelime Ekle"),
@@ -38,6 +48,7 @@ class _AddWordState extends ConsumerState<AddWord> {
                 children: [
                   FormBuilderTextField(
                     name: "word",
+                    initialValue: widget.myWords?.word,
                     decoration: const InputDecoration(labelText: 'Kelime'),
                     validator: FormBuilderValidators.compose(
                       [
@@ -49,6 +60,7 @@ class _AddWordState extends ConsumerState<AddWord> {
                   const SizedBox(height: 16.0),
                   FormBuilderTextField(
                     name: "means",
+                    initialValue: widget.myWords?.means,
                     decoration: const InputDecoration(labelText: 'Karşılığı'),
                     validator: FormBuilderValidators.compose(
                       [
@@ -56,29 +68,39 @@ class _AddWordState extends ConsumerState<AddWord> {
                             errorText: "Bu alan boş bırakılamaz."),
                       ],
                     ),
+                    inputFormatters: [
+                      MaskTextInputFormatter(
+                          mask:
+                              "*********************************************************",
+                          filter: {"*": RegExp('[a-zA-ZğüşıöçĞÜŞİÖÇ ]')}),
+                    ],
                   ),
                   const SizedBox(height: 16.0),
                   FormBuilderTextField(
                     name: "spouse",
+                    initialValue: widget.myWords?.spouse,
                     decoration: const InputDecoration(labelText: 'Eş Anlamı'),
                   ),
                   const SizedBox(height: 16.0),
                   FormBuilderTextField(
                     name: "sentence",
+                    initialValue: widget.myWords?.sentence,
                     decoration: const InputDecoration(
                         labelText: 'Bir cumle icinde kullanımı'),
                   ),
                   const SizedBox(height: 25.0),
                   MaterialButton(
                     color: Colors.green,
-                    onPressed: ()  {
+                    onPressed: () {
                       if (_formKey.currentState!.saveAndValidate()) {
                         final Words words = Words.fromJson({
                           "word": _formKey.currentState!.value["word"],
                           "means": _formKey.currentState!.value["means"],
                           "spouse": _formKey.currentState?.value["spouse"],
                           "sentence": _formKey.currentState?.value["sentence"],
-                          "id": uuid,
+                          "id": widget.myWords?.id == null
+                              ? uuid
+                              : widget.myWords!.id
                         });
 
                         try {

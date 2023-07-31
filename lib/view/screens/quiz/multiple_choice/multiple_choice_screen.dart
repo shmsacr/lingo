@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kartal/kartal.dart';
-import 'package:lingo/controller/riverpod/quiz_controller.dart';
+import 'package:lingo/controller/riverpod/multiple_choice_controller.dart';
 import 'package:lingo/view/theme/app_colors.dart';
 import 'package:lingo/view/widget/custom_text_widget.dart';
 
@@ -15,11 +15,15 @@ final class MultipleChoiceScreen extends ConsumerStatefulWidget {
 }
 
 class _MultipleChoiceScreenState extends ConsumerState<MultipleChoiceScreen> {
+
+
   @override
   void initState() {
+  
     super.initState();
-    Future.microtask(() => ref.read(quizProvider.notifier).fetchAndLoading());
+       Future.microtask(() => ref.read(quizProvider.notifier).fetchAndLoading());
   }
+
 
   @override
   Widget build(BuildContext context) {

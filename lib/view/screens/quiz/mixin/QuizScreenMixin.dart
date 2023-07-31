@@ -8,7 +8,6 @@ import 'package:lingo/view/screens/quiz/quiz_Screen.dart';
 
 import '../../../theme/app_colors.dart';
 
-
 mixin QuizScreenMixin {
   List<Widget> getCards() {
     return _quizScreenItem
@@ -23,7 +22,7 @@ mixin QuizScreenMixin {
 }
 
 void pushToSelectScreenQuiz(BuildContext context, int index, WidgetRef ref) {
-  final List<Words>? _allWord = ref.read(wordListNotifier.notifier).allWords;
+  final List<Words>? _allWord = ref.read(wordListNotifierProvider);
 
   switch (index) {
     case 0:
@@ -44,7 +43,7 @@ void pushToSelectScreenQuiz(BuildContext context, int index, WidgetRef ref) {
       Navigator.pushNamed(context, '/denemePage');
       break;
     case 2:
-      Navigator.pushNamed(context, '/denemePage');
+      Navigator.pushNamed(context, '/writePage');
       break;
     case 3:
       Navigator.pushNamed(context, '/denemePage');

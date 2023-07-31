@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kartal/kartal.dart';
-
 import 'package:lingo/controller/riverpod/words_controller.dart';
 import 'package:lingo/core/const/string_const.dart';
 import 'package:lingo/view/screens/quiz/mixin/QuizScreenMixin.dart';
@@ -16,11 +15,6 @@ class QuizScreen extends ConsumerStatefulWidget with QuizScreenMixin {
 }
 
 class _QuizScreenState extends ConsumerState<QuizScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -131,12 +125,7 @@ final class _QuizLearnCard extends ConsumerWidget {
             _QuizAppTitle(),
             _Divider(),
             _ListTileRow(
-              title: ref
-                      .read(wordListNotifier.notifier)
-                      .allWords
-                      ?.length
-                      .toString() ??
-                  'Kelime Bilgisi Yok',
+              title: ref.watch(wordListNotifierProvider).length.toString(),
             ),
           ],
         ),

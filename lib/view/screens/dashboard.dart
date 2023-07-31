@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lingo/controller/dashboard_controller.dart';
+import 'package:lingo/controller/riverpod/dashboard_controller.dart';
 import 'package:lingo/view/screens/quiz/Quiz_Screen.dart';
 import 'package:lingo/view/theme/app_colors.dart';
 

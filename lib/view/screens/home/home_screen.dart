@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:kartal/kartal.dart';
 import 'package:lingo/controller/riverpod/words_controller.dart';
-import 'package:lingo/view/theme/app_colors.dart';
+import 'package:lingo/view/screens/home/add_word_screen.dart';
+import 'package:search_page/search_page.dart';
 
 import '../../../data/model/word_model.dart';
 import '../../widget/custom_text_widget.dart';
@@ -17,33 +18,29 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
-  void initState() {
-    super.initState();
-    Future.microtask(
-        () => ref.read(wordListNotifier.notifier).fetchAndLoading());
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final _fetchWordsUpdate = ref.watch(wordListNotifier).words;
-    final _wordProviderNotifier = ref.read(wordListNotifier.notifier);
-    final _isLoading = ref.watch(wordListNotifier).isLoading;
+    // final _fetchWordsUpdate = ref.watch(wordListNotifier).words;
+    // final _wordProviderNotifier = ref.read(wordListNotifier.notifier);
+    // final _isLoading = ref.watch(wordListNotifier).isLoading;
 
-    Widget _checkIsLoadingAndIsListEmpty() {
-      if (_isLoading == true) {
-        return Center(
-          child: CircularProgressIndicator(
-            color: AppColors.darkTheme,
-          ),
-        );
-      } else if (_fetchWordsUpdate?.isEmpty == true) {
-        return Center(child: CustomTextWidget(text: 'Kelime Ekleyiniz'));
-      } else {
-        return _HomeBody(
-            fetchWordsUpdate: _fetchWordsUpdate,
-            wordProviderNotifier: _wordProviderNotifier);
-      }
-    }
+    final wordList = ref.watch(wordListNotifierProvider);
+    final seacrhList = ref.watch(wordListNotifierProvider);
+
+    // Widget _checkIsLoadingAndIsListEmpty() {
+    //   if (_isLoading == true) {
+    //     return Center(
+    //       child: CircularProgressIndicator(
+    //         color: AppColors.darkTheme,
+    //       ),
+    //     );
+    //   } else if (_fetchWordsUpdate?.isEmpty == true) {
+    //     return Center(child: CustomTextWidget(text: 'Kelime Ekleyiniz'));
+    //   } else {
+    //     return _HomeBody(
+    //         fetchWordsUpdate: _fetchWordsUpdate,
+    //         wordProviderNotifier: _wordProviderNotifier);
+    //   }
+    // }
 
     return Scaffold(
       appBar: AppBar(
@@ -57,127 +54,130 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => showSearch(
+                context: context,
+                delegate: SearchPage(
+                  onQueryUpdate: print,
+                  items: seacrhList,
+                  searchLabel: 'Search people',
+                  suggestion: const Center(
+                    child: Text('Filter people by name, surname or age'),
+                  ),
+                  builder: (searchWord) =>
+                      buildPadding(context, ref, searchWord),
+                  filter: (searchWord) => [searchWord.means, searchWord.word],
+                )),
             icon: Icon(Icons.search),
           ),
         ],
       ),
-      body: _checkIsLoadingAndIsListEmpty(),
-    );
-  }
-}
-
-class _HomeBody extends StatelessWidget {
-  _HomeBody({
-    required List<Words>? fetchWordsUpdate,
-    required WordListNotifier wordProviderNotifier,
-  })  : _fetchWordsUpdate = fetchWordsUpdate,
-        _wordProviderNotifier = wordProviderNotifier;
-
-  final List<Words>? _fetchWordsUpdate;
-  final WordListNotifier _wordProviderNotifier;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: context.padding.onlyLeftNormal,
-      child: SizedBox(
-        width: context.general.mediaQuery.size.width * 0.9,
-        child: ListView.builder(
-          itemCount: _fetchWordsUpdate?.length,
-          itemBuilder: (context, index) {
-            final isdata = _fetchWordsUpdate![index];
-
-            return Padding(
-              padding: context.padding.low,
-              child: Card(
-                elevation: 2,
-                child: Slidable(
-                  endActionPane: ActionPane(
-                    motion: ScrollMotion(),
-                    children: [
-                      SlidableAction(
-                        onPressed: (context) {
-                          _wordProviderNotifier.deleteWord(isdata);
-                        },
-                        backgroundColor: Colors.red,
-                        icon: Icons.delete,
-                      ),
-                      SlidableAction(
-                        onPressed: (context) {},
-                        backgroundColor: Colors.orange,
-                        icon: Icons.edit,
-                      ),
-                    ],
-                  ),
-                  child: _HomeListTile(isdata: isdata),
+      body: wordList.isEmpty
+          ? Center(child: Text("Kelime ekleyin"))
+          : Padding(
+              padding: context.padding.onlyLeftNormal,
+              child: SizedBox(
+                width: context.general.mediaQuery.size.width * 0.9,
+                child: ListView.builder(
+                  itemCount: wordList.length,
+                  itemBuilder: (context, index) {
+                    final isdata = wordList[index];
+                    return buildPadding(context, ref, isdata);
+                  },
                 ),
               ),
-            );
-          },
-        ),
-      ),
+            ),
     );
   }
-}
 
-class _HomeListTile extends StatelessWidget {
-  const _HomeListTile({
-    required this.isdata,
-  });
-
-  final Words isdata;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      titleAlignment: ListTileTitleAlignment.center,
-      onTap: () => _showDetail(context, isdata),
-      leading: IconButton(
-        onPressed: () async {},
-        icon: Icon(
-          Icons.volume_up_rounded,
-          color: Colors.white,
-        ),
-      ),
-      title: Center(
-          child: CustomTextWidget(
-        text: isdata.word,
-        fontsize: 24,
-      )),
-      subtitle: Center(
-        child: CustomTextWidget(
-          text: isdata.means,
-          fontWeight: FontWeight.w100,
-          fontsize: 18,
-          color: Colors.grey,
-        ),
-      ),
-    );
-  }
-}
-
-Future<void> _showDetail(BuildContext context, Words words) async {
-  return await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        elevation: 20,
-        title: ListTile(
-          title: Text(words.word),
-          subtitle: Text(words.means),
-        ),
-        content: ListTile(
-          title: Text("Eş Anlamlısı"),
-          subtitle: Text(words.spouse ?? "Eş anlam ekleyin"),
-        ),
-        actions: [
-          ListTile(
-            title: Text("Cumle içinde kullanımı"),
-            subtitle: Text(words.spouse ?? "Cumle ekleyin"),
+  Padding buildPadding(BuildContext context, WidgetRef ref, Words isdata) {
+    return Padding(
+      padding: context.padding.low,
+      child: Card(
+        elevation: 2,
+        child: Slidable(
+          endActionPane: ActionPane(
+            motion: ScrollMotion(),
+            children: [
+              SlidableAction(
+                onPressed: (context) {
+                  ref
+                      .read(wordListNotifierProvider.notifier)
+                      .deleteWord(isdata);
+                },
+                backgroundColor: Colors.red,
+                icon: Icons.delete,
+              ),
+              SlidableAction(
+                onPressed: (context) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute<AddWord>(
+                        builder: (context) => AddWord(
+                              myWords: isdata,
+                            )),
+                  );
+                },
+                backgroundColor: Colors.orange,
+                icon: Icons.edit,
+              ),
+            ],
           ),
-        ],
-      );
-    },
-  );
+          child: SizedBox(
+            child: ListTile(
+              titleAlignment: ListTileTitleAlignment.center,
+              onTap: () => _showDetail(context, isdata),
+              leading: IconButton(
+                onPressed: () async {
+                  ref
+                      .read(wordListNotifierProvider.notifier)
+                      .speak(isdata.word);
+                },
+                icon: Icon(
+                  Icons.volume_up_rounded,
+                  color: Colors.black,
+                ),
+              ),
+              title: Center(
+                  child: CustomTextWidget(
+                text: isdata.word,
+                fontsize: context.general.textTheme.titleMedium?.fontSize,
+              )),
+              subtitle: Center(
+                child: CustomTextWidget(
+                  text: isdata.means,
+                  fontWeight: FontWeight.w100,
+                  fontsize: context.general.textTheme.titleMedium?.fontSize,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _showDetail(BuildContext context, Words words) async {
+    return await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          elevation: 20,
+          title: ListTile(
+            title: Text(words.word),
+            subtitle: Text(words.means),
+          ),
+          content: ListTile(
+            title: Text("Eş Anlamlısı"),
+            subtitle: Text(words.spouse ?? "Eş anlam ekleyin"),
+          ),
+          actions: [
+            ListTile(
+              title: Text("Cumle içinde kullanımı"),
+              subtitle: Text(words.spouse ?? "Cumle ekleyin"),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

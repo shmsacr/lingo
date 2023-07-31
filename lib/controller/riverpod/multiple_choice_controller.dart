@@ -8,8 +8,9 @@ import 'package:lingo/data/model/word_model.dart';
 
 final quizProvider =
     StateNotifierProvider.autoDispose<QuizNotifier, QuizState>((ref) {
-  final readWords = ref.read(wordListNotifier.notifier).allWords;
-  return QuizNotifier(allWordList: readWords ?? []);
+  final readWords = ref.read(wordListNotifierProvider);
+
+  return QuizNotifier(allWordList: readWords);
 });
 
 class QuizNotifier extends StateNotifier<QuizState> {
