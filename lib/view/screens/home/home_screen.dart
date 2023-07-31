@@ -4,7 +4,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:kartal/kartal.dart';
 import 'package:lingo/controller/words_controller.dart';
 import 'package:lingo/view/screens/home/add_word_screen.dart';
-import 'package:lingo/view/widget/custom_search_dekegate.dart';
 import 'package:search_page/search_page.dart';
 
 import '../../../data/model/word_model.dart';
@@ -153,7 +152,5 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  void _showSearchPage(BuildContext context, WidgetRef ref) {
-    showSearch(context: context, delegate: CustomSearchDelegate(ref: ref));
-  }
+
 }
