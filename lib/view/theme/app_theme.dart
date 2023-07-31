@@ -33,7 +33,7 @@ final class AppTheme {
     tones: FlexTones.vividSurfaces(Brightness.light),
     visualDensity: FlexColorScheme.comfortablePlatformDensity,
     useMaterial3: true,
-    // To use the playground font, add GoogleFonts package and uncomment
+ 
     fontFamily: GoogleFonts.poppins().fontFamily,
   );
   static final dark = FlexThemeData.dark(

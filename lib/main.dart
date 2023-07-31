@@ -3,10 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:lingo/data/services/local_storage.dart';
-import 'package:lingo/view/screens/dashboard.dart';
 import 'package:lingo/view/theme/app_theme.dart';
+ import 'package:lingo/controller/routes/router.dart' as route;
 
+
+//D:\FlutterWork\lingo\lib\controller\routes\router.dart
 import 'data/model/word_model.dart';
+import 'view/theme/custom_theme.dart';
 
 final locator = GetIt.instance;
 void setup() {
@@ -29,13 +32,13 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
-      theme: AppTheme.light.copyWith(
-        scaffoldBackgroundColor: Colors.white,
-      ),
+      initialRoute: route.Router.dashboard,
+      onGenerateRoute: route.Router.generateRoute,
+      theme: CustomAppTheme().theme,
       darkTheme: AppTheme.dark,
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
-      home: const DashboardScreen(),
+     
     );
   }
 }

@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../controller/words_controller.dart';
+import '../../../controller/riverpod/words_controller.dart';
 import '../../../data/model/word_model.dart';
 
 class AddWord extends ConsumerStatefulWidget {
@@ -71,7 +71,7 @@ class _AddWordState extends ConsumerState<AddWord> {
                   const SizedBox(height: 25.0),
                   MaterialButton(
                     color: Colors.green,
-                    onPressed: () async {
+                    onPressed: ()  {
                       if (_formKey.currentState!.saveAndValidate()) {
                         final Words words = Words.fromJson({
                           "word": _formKey.currentState!.value["word"],
@@ -80,8 +80,7 @@ class _AddWordState extends ConsumerState<AddWord> {
                           "sentence": _formKey.currentState?.value["sentence"],
                           "id": uuid,
                         });
-                        print(_formKey.currentState!.value["word"]);
-                        print(_formKey.currentState!.value["spouse"]);
+
                         try {
                           wordCt.addWord(words);
                           if (context.mounted) {

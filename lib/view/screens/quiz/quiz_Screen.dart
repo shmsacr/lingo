@@ -1,18 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lingo/core/const/string_const.dart';
 import 'package:kartal/kartal.dart';
-import 'package:lingo/core/enums/image_enums.dart';
+
+import 'package:lingo/controller/riverpod/words_controller.dart';
+import 'package:lingo/core/const/string_const.dart';
+import 'package:lingo/view/screens/quiz/mixin/QuizScreenMixin.dart';
 import 'package:lingo/view/theme/app_colors.dart';
 import 'package:lingo/view/widget/custom_text_widget.dart';
 
-class QuizScreen extends ConsumerWidget {
-  const QuizScreen({
-    Key? key,
-  }) : super(key: key);
+class QuizScreen extends ConsumerStatefulWidget with QuizScreenMixin {
+  const QuizScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _QuizScreenState();
+}
+
+class _QuizScreenState extends ConsumerState<QuizScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -27,44 +37,21 @@ class QuizScreen extends ConsumerWidget {
                   fontsize: context.general.textTheme.titleLarge?.fontSize,
                 ),
                 SizedBox(
-                  height: context.sized.dynamicHeight(0.02),
-                ),
-                SizedBox(
                   height: 170,
                   child: _QuizLearnCard(),
                 ),
                 SizedBox(
                   height: context.sized.dynamicHeight(0.1),
                 ),
-
-                //çoktan seçmeli
-                _PracticalCard(
-                  text: StringConst.multipleChoice,
-                  subtitle: StringConst.multipleChoice,
-                  imageURL: ImageEnum.choose.toPng,
-                  cardBordeColor: AppColors.green,
-                ),
-                // true false
-                _PracticalCard(
-                  text: StringConst.trueAndFalse,
-                  subtitle: StringConst.trueAndFalse,
-                  imageURL: ImageEnum.trueFalse.toPng,
-                  cardBordeColor: AppColors.red,
-                ),
-                // kelime yazma
-                _PracticalCard(
-                  text: StringConst.writingPractice,
-                  subtitle: StringConst.writingPractice,
-                  imageURL: ImageEnum.creativeWriting.toPng,
-                  cardBordeColor: AppColors.blue,
-                ),
-
-                // karışık
-                _PracticalCard(
-                  text: StringConst.mixedPractice,
-                  subtitle: StringConst.mixedPractice,
-                  imageURL: ImageEnum.quiz.toPng,
-                  cardBordeColor: AppColors.purple,
+                ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: widget.getCards().length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) => InkWell(
+                      onTap: () {
+                        pushToSelectScreenQuiz(context, index, ref);
+                      },
+                      child: widget.getCards()[index]),
                 ),
               ],
             ),
@@ -75,43 +62,48 @@ class QuizScreen extends ConsumerWidget {
   }
 }
 
-class _PracticalCard extends StatelessWidget {
-  const _PracticalCard(
-      {required this.text,
-      required this.subtitle,
-      required this.imageURL,
-      required this.cardBordeColor});
+@immutable
+final class PracticalCard extends StatelessWidget {
+  PracticalCard({
+    required this.text,
+    required this.subtitle,
+    required this.imageURL,
+    required this.textCardColor,
+  });
 
   final String text;
   final String subtitle;
   final String imageURL;
-  final Color cardBordeColor;
+  final Color textCardColor;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 120,
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-          side: BorderSide(
-            color: cardBordeColor,
+    return Padding(
+      padding: context.padding.low,
+      child: SizedBox(
+        height: 120,
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+            side: BorderSide(
+              color: AppColors.darkTheme,
+            ),
           ),
-        ),
-        child: Padding(
-          padding: context.padding.onlyTopLow,
-          child: ListTile(
-            title: CustomTextWidget(
-              text: text,
-              fontsize: context.general.textTheme.titleMedium?.fontSize,
-              color: cardBordeColor,
+          child: Padding(
+            padding: context.padding.onlyTopLow,
+            child: ListTile(
+              title: CustomTextWidget(
+                text: text,
+                fontsize: context.general.textTheme.titleMedium?.fontSize,
+                color: textCardColor,
+              ),
+              subtitle: CustomTextWidget(
+                text: subtitle,
+                fontsize: context.general.textTheme.bodySmall?.fontSize,
+                color: textCardColor,
+              ),
+              trailing: Image.asset(imageURL),
             ),
-            subtitle: CustomTextWidget(
-              text: subtitle,
-              fontsize: context.general.textTheme.bodySmall?.fontSize,
-              color: cardBordeColor,
-            ),
-            trailing: Image.asset(imageURL),
           ),
         ),
       ),
@@ -119,16 +111,17 @@ class _PracticalCard extends StatelessWidget {
   }
 }
 
-class _QuizLearnCard extends StatelessWidget {
+@immutable
+final class _QuizLearnCard extends ConsumerWidget {
   const _QuizLearnCard();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
         side: BorderSide(
-          color: AppColors.primary,
+          color: AppColors.darkTheme,
         ),
       ),
       child: Padding(
@@ -137,7 +130,14 @@ class _QuizLearnCard extends StatelessWidget {
           children: [
             _QuizAppTitle(),
             _Divider(),
-            _ListTileRow(),
+            _ListTileRow(
+              title: ref
+                      .read(wordListNotifier.notifier)
+                      .allWords
+                      ?.length
+                      .toString() ??
+                  'Kelime Bilgisi Yok',
+            ),
           ],
         ),
       ),
@@ -145,7 +145,8 @@ class _QuizLearnCard extends StatelessWidget {
   }
 }
 
-class _QuizAppTitle extends StatelessWidget {
+@immutable
+final class _QuizAppTitle extends StatelessWidget {
   const _QuizAppTitle();
 
   @override
@@ -163,9 +164,12 @@ class _QuizAppTitle extends StatelessWidget {
   }
 }
 
-class _ListTileRow extends StatelessWidget {
-  const _ListTileRow();
-
+@immutable
+final class _ListTileRow extends StatelessWidget {
+  const _ListTileRow({
+    required this.title,
+  });
+  final String title;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -175,15 +179,15 @@ class _ListTileRow extends StatelessWidget {
             child: Padding(
           padding: context.padding
               .onlyLeftHigh, // PADDING DEĞİŞ EXPNADED KALKACAK, CENTER ALACAK
-          child:
-              _CustomQuizListTile(title: '121212', subtitle: 'Toplam Kelime'),
+          child: _CustomQuizListTile(title: title, subtitle: 'Toplam Kelime'),
         )),
       ],
     );
   }
 }
 
-class _CustomQuizListTile extends StatelessWidget {
+@immutable
+final class _CustomQuizListTile extends StatelessWidget {
   const _CustomQuizListTile({
     required this.title,
     required this.subtitle,
@@ -206,7 +210,8 @@ class _CustomQuizListTile extends StatelessWidget {
   }
 }
 
-class _Divider extends StatelessWidget {
+@immutable
+final class _Divider extends StatelessWidget {
   const _Divider();
 
   @override
