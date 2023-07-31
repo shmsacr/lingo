@@ -4,7 +4,7 @@ import 'package:lingo/data/model/word_model.dart';
 import 'package:lingo/data/services/local_storage.dart';
 
 final wordListNotifierProvider =
-    StateNotifierProvider.autoDispose<WordListNotifier, List<Words>>(
+    StateNotifierProvider<WordListNotifier, List<Words>>(
   (ref) => WordListNotifier(),
 );
 

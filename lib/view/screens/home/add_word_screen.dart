@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:lingo/controller/riverpod/words_controller.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../controller/words_controller.dart';
 import '../../../data/model/word_model.dart';
 
 class AddWord extends ConsumerStatefulWidget {
@@ -91,7 +91,7 @@ class _AddWordState extends ConsumerState<AddWord> {
                   const SizedBox(height: 25.0),
                   MaterialButton(
                     color: Colors.green,
-                    onPressed: () async {
+                    onPressed: () {
                       if (_formKey.currentState!.saveAndValidate()) {
                         final Words words = Words.fromJson({
                           "word": _formKey.currentState!.value["word"],
@@ -102,8 +102,7 @@ class _AddWordState extends ConsumerState<AddWord> {
                               ? uuid
                               : widget.myWords!.id
                         });
-                        print(_formKey.currentState!.value["word"]);
-                        print(_formKey.currentState!.value["spouse"]);
+
                         try {
                           wordCt.addWord(words);
                           if (context.mounted) {

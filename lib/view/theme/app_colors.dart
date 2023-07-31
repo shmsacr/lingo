@@ -18,8 +18,10 @@ final class AppColors {
   static const Color cardLight = Color(0xFFF9FAFE);
 
   static const Color green = Color.fromARGB(255, 3, 138, 59);
-  static const Color red = Color(0xFFD50000);
+  static const Color red = Color.fromARGB(255, 255, 0, 0);
   static const Color blue = Color(0xFF2962FF);
+  static const Color darkTheme = Color(0xFF0e1d27);
+  static const Color lightTheme = Color(0xFF0b222f);
 
   static const Color purple = Color(0xFF6200EA);
 }

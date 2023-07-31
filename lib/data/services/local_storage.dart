@@ -14,24 +14,23 @@ class HiveLocalStroge extends LocalStroge {
 
   @override
   Future<void> addWord({required Words word}) async {
-    var box = await Hive.openBox(boxName);
+    var box = await Hive.openBox<Words>(boxName);
     await box.put(word.id, word);
     await box.close();
   }
 
   @override
   Future<Words> getWords({required Words word}) async {
-    var box = await Hive.openBox(boxName);
+    var box = await Hive.openBox<Words>(boxName);
     var retrievedWord = box.get(word.id);
     await box.close();
 
-    // Cast the retrieved value to Words and handle null case using null-aware operator
-    return (retrievedWord as Words?) ?? Words(id: '', word: '', means: '');
+    return (retrievedWord) ?? Words(id: '', word: '', means: '');
   }
 
   @override
   Future<List<Words>> getAllWords() async {
-    var box = await Hive.openBox(boxName);
+    var box = await Hive.openBox<Words>(boxName);
     var wordList = box.values.cast<Words>().toList();
     await box.close();
     return wordList;
@@ -39,7 +38,7 @@ class HiveLocalStroge extends LocalStroge {
 
   @override
   Future<Words> updateWord({required Words word}) async {
-    var box = await Hive.openBox(boxName);
+    var box = await Hive.openBox<Words>(boxName);
     await box.put(word.id, word);
     await box.close();
     return word;
@@ -47,7 +46,7 @@ class HiveLocalStroge extends LocalStroge {
 
   @override
   Future<bool> deleteWord({required Words word}) async {
-    var box = await Hive.openBox(boxName);
+    var box = await Hive.openBox<Words>(boxName);
     await box.delete(word.id);
     await box.close();
     return true;

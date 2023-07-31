@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../controller/writing_exercise_controller.dart';
+import '../../../controller/riverpod/writing_exercise_controller.dart';
 
 class WritingExercisesScreen extends ConsumerStatefulWidget {
   const WritingExercisesScreen({
@@ -19,14 +19,12 @@ class _WritingExercisesScreenState
   final myController = TextEditingController();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     myController.addListener(changeColor);
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     myController.dispose();
     super.dispose();
   }
@@ -94,7 +92,6 @@ class _WritingExercisesScreenState
                           randomIndex.state = Random().nextInt(2);
                           print(randomIndex.state);
                           ref.refresh(randomWordProvider);
-
                           myController.clear();
 
                           // Cevap kontrolü ve sonraki kelimeye geçiş işlemleri burada yapılabilir.
