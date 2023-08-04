@@ -41,6 +41,7 @@ void pushToSelectScreenQuiz(BuildContext context, int index, WidgetRef ref) {
       break;
     case 1:
       Navigator.pushNamed(context, '/mixedQuiz');
+      Navigator.pushNamed(context, '/trueFalse');
       break;
     case 2:
       Navigator.pushNamed(context, '/writePage');
