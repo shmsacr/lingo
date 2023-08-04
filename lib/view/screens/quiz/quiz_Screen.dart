@@ -57,7 +57,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
 }
 
 @immutable
-final class PracticalCard extends StatelessWidget {
+class PracticalCard extends StatelessWidget {
   PracticalCard({
     required this.text,
     required this.subtitle,
