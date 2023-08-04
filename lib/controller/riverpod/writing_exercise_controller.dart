@@ -14,5 +14,5 @@ final randomWordProvider = FutureProvider<Words>((ref) async {
   return wordList[randomIndex];
 });
 
-final fillColorProvider = StateProvider<Color>((ref) => Colors.blueGrey);
+final fillColorProvider = StateProvider<Color>((ref) => Colors.white38);
 final randomIndexProvider = StateProvider<int>((ref) => Random().nextInt(1));

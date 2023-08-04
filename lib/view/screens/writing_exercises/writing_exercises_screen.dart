@@ -2,6 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kartal/kartal.dart';
+import 'package:lingo/view/theme/app_colors.dart';
+import 'package:lingo/view/widget/custom_text_widget.dart';
 
 import '../../../controller/riverpod/writing_exercise_controller.dart';
 
@@ -17,6 +20,7 @@ class WritingExercisesScreen extends ConsumerStatefulWidget {
 class _WritingExercisesScreenState
     extends ConsumerState<WritingExercisesScreen> {
   final myController = TextEditingController();
+  String? text;
   @override
   void initState() {
     super.initState();
@@ -33,15 +37,16 @@ class _WritingExercisesScreenState
     final randomWord = ref.watch(randomWordProvider);
     final randomIndex = ref.watch(randomIndexProvider.notifier);
 
-    String text = randomIndex.state == 0
+    text = randomIndex.state == 0
         ? randomWord.value!.word
         : randomWord.value!.means;
     print("${myController.text} -- $text");
     print(text);
     if (myController.text.isEmpty) {
-      ref.watch(fillColorProvider.notifier).state = Colors.blueGrey;
-    } else if (myController.text.toLowerCase() == text.toLowerCase()) {
-      ref.refresh(fillColorProvider.notifier).state = Colors.greenAccent;
+      ref.watch(fillColorProvider.notifier).state =
+          AppColors.appGeneralDarkGrey;
+    } else if (myController.text.toLowerCase() == text?.toLowerCase()) {
+      ref.refresh(fillColorProvider.notifier).state = Colors.green;
     } else {
       ref.refresh(fillColorProvider.notifier).state = Colors.red;
     }
@@ -57,48 +62,95 @@ class _WritingExercisesScreenState
           title: Text('Kelime Egzersizi'),
         ),
         body: randomWord.when(
-            data: (data) => Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        'Anlamını yazın:',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 16),
-                      Text(
-                        randomIndex.state == 0 ? data.means : data.word,
-                        style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(height: 16),
-                      TextField(
-                        controller: myController,
-                        decoration: InputDecoration(
-                            filled: true,
-                            fillColor: fillerColor.state,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide.none,
-                            )),
-                      ),
-                      SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: () {
-                          randomIndex.state = Random().nextInt(2);
-                          print(randomIndex.state);
-                          ref.refresh(randomWordProvider);
-                          myController.clear();
+            data: (data) => Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: SizedBox(
+                      height: 400,
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              CustomTextWidget(
+                                  text: randomIndex.state == 0
+                                      ? data.means
+                                      : data.word,
+                                  fontsize: context.general.textTheme
+                                      .headlineMedium?.fontSize,
+                                  color: AppColors.appGeneralDarkGrey),
+                              Divider(
+                                color: Colors.black,
+                                endIndent: 30,
+                                indent: 30,
+                              ),
+                              SizedBox(height: 16),
+                              TextField(
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                ),
+                                enabled: myController.text.toLowerCase() ==
+                                        text?.toLowerCase()
+                                    ? false
+                                    : true,
+                                controller: myController,
+                                decoration: InputDecoration(
+                                  hintText: 'Kelimeyi buraya yazınız',
+                                  hintStyle: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.grey,
+                                  ),
+                                  suffixIcon: myController.text.toLowerCase() ==
+                                          text?.toLowerCase()
+                                      ? Icon(
+                                          Icons.check,
+                                          color: Colors.green,
+                                        )
+                                      : null,
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: fillerColor.state, width: 1),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: fillerColor.state, width: 1),
+                                  ),
+                                  disabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: fillerColor.state, width: 1),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 16),
+                              TextButton(
+                                onPressed: () {
+                                  randomIndex.state = Random().nextInt(2);
+                                  print(randomIndex.state);
+                                  ref.refresh(randomWordProvider);
+                                  myController.clear();
 
-                          // Cevap kontrolü ve sonraki kelimeye geçiş işlemleri burada yapılabilir.
-                        },
-                        child: Text('Sonraki Kelime'),
+                                  // Cevap kontrolü ve sonraki kelimeye geçiş işlemleri burada yapılabilir.
+                                },
+                                style: TextButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                child: CustomTextWidget(
+                                  text: 'Sonraki Kelime',
+                                  color: AppColors.appGeneralDarkGrey,
+                                  fontsize: context
+                                      .general.textTheme.titleMedium?.fontSize,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ],
+                    ),
                   ),
                 ),
             error: (error, _) => Text(error.toString()),

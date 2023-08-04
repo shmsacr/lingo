@@ -15,15 +15,11 @@ final class MultipleChoiceScreen extends ConsumerStatefulWidget {
 }
 
 class _MultipleChoiceScreenState extends ConsumerState<MultipleChoiceScreen> {
-
-
   @override
   void initState() {
-  
     super.initState();
-       Future.microtask(() => ref.read(quizProvider.notifier).fetchAndLoading());
+    Future.microtask(() => ref.read(quizProvider.notifier).fetchAndLoading());
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -48,31 +44,63 @@ class _MultipleChoiceScreenState extends ConsumerState<MultipleChoiceScreen> {
               quizNotifier: _quizproviderNotifier,
             )
           : Padding(
-              padding: context.padding.medium,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  _QuestionWordTitle(quizWordProvider: _quizWordProvider),
-                  SizedBox(
-                    height: context.sized.dynamicHeight(0.05),
-                  ),
-                  ..._buildRadioListTile(_quizWordProvider.options ?? []),
-                  SizedBox(
-                    height: context.sized.dynamicHeight(0.05),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      ref.read(quizProvider.notifier).nextQuestion();
-                    },
-                    child: _quizWordProvider.questionCount ==
-                            _quizproviderNotifier.allWordList.length
-                        ? Icon(Icons.done)
-                        : CustomTextWidget(text: 'Next Question'),
-                  ),
-                  CustomTextWidget(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: SizedBox(
+                height: context.general.mediaQuery.size.height,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    CustomTextWidget(
                       text:
-                          '${(_quizWordProvider.questionCount ?? 1)} / ${_quizproviderNotifier.allWordList.length}')
-                ],
+                          'Soru:   ${(_quizWordProvider.questionCount ?? 1)} / ${_quizproviderNotifier.allWordList.length}',
+                      color: Colors.white,
+                    ),
+                    Card(
+                      elevation: 20,
+                      color: AppColors.appGeneralLigthGrey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          _QuestionWordTitle(
+                              quizWordProvider: _quizWordProvider),
+                          Divider(
+                            color: AppColors.appGeneralDarkGrey,
+                            height: 10,
+                            thickness: 3,
+                            indent: 30,
+                            endIndent: 30,
+                          ),
+                          SizedBox(
+                            height: context.sized.dynamicHeight(0.05),
+                          ),
+                          ..._buildRadioListTile(
+                              _quizWordProvider.options ?? []),
+                          SizedBox(
+                            height: context.sized.dynamicHeight(0.05),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              ref.read(quizProvider.notifier).nextQuestion();
+                            },
+                            child: _quizWordProvider.questionCount ==
+                                    _quizproviderNotifier.allWordList.length
+                                ? Icon(
+                                    Icons.done,
+                                    color: Colors.white,
+                                    size: 35,
+                                  )
+                                : CustomTextWidget(
+                                    text: 'Next Question',
+                                    color: Colors.white,
+                                    fontsize: context.general.textTheme
+                                        .titleMedium?.fontSize,
+                                  ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
     );
@@ -83,22 +111,52 @@ class _MultipleChoiceScreenState extends ConsumerState<MultipleChoiceScreen> {
     final _currentQuestion = ref.watch(quizProvider).currentQuestion;
 
     return options.map((option) {
-      Color cardColor = selectedAnswer == ""
-          ? AppColors.darkTheme
-          : option == _currentQuestion?['means']
-              ? Colors.green.shade800
-              : Colors.red.shade300;
+      Color cardColor;
+      if (selectedAnswer == "") {
+        cardColor = Colors.white;
+      } else if (option == _currentQuestion?['means']) {
+        cardColor = const Color.fromARGB(255, 49, 224, 55);
+      } else if (option == selectedAnswer) {
+        cardColor = Colors.red;
+      } else {
+        cardColor = Colors.white;
+      }
 
-      return Card(
-        color: cardColor,
-        elevation: 4,
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
         child: RadioListTile(
-          fillColor: MaterialStatePropertyAll<Color>(Colors.white),
+          shape: RoundedRectangleBorder(
+            side: BorderSide(
+              width: 2,
+              color: cardColor,
+            ),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          tileColor: Colors.white,
+          fillColor: MaterialStatePropertyAll(Colors.white),
           value: option,
-          title: CustomTextWidget(
-            text: option,
-            color: Colors.white,
-            fontsize: context.general.textTheme.headlineMedium?.fontSize,
+          secondary: selectedAnswer == ""
+              ? null
+              : option == _currentQuestion?['means']
+                  ? Icon(
+                      Icons.check_circle,
+                      color: Colors.green,
+                    )
+                  : Icon(
+                      Icons.close,
+                      color: Colors.red,
+                    ),
+          title: Align(
+            alignment: Alignment.centerLeft,
+            child: CustomTextWidget(
+              text: option,
+              color: selectedAnswer == ""
+                  ? AppColors.appGeneralDarkGrey
+                  : option == _currentQuestion?['means']
+                      ? Colors.green
+                      : Colors.grey,
+              fontsize: context.general.textTheme.titleMedium?.fontSize,
+            ),
           ),
           groupValue: selectedAnswer,
           onChanged: selectedAnswer != ""
@@ -187,15 +245,12 @@ final class _QuestionWordTitle extends StatelessWidget {
       ),
       width: context.general.mediaQuery.size.width * 0.8,
       height: 70,
-      child: Card(
-        color: AppColors.darkTheme,
-        child: Center(
-          child: CustomTextWidget(
-            text: _quizWordProvider.currentQuestion?['word']?.toUpperCase() ??
-                'soru gelmedi',
-            fontsize: context.general.textTheme.headlineMedium?.fontSize,
-            color: Colors.white,
-          ),
+      child: Center(
+        child: CustomTextWidget(
+          text:
+              '  ${_quizWordProvider.currentQuestion?['word']?.toUpperCase()}  ',
+          fontsize: context.general.textTheme.titleLarge?.fontSize,
+          color: Colors.white,
         ),
       ),
     );

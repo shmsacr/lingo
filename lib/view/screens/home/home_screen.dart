@@ -4,6 +4,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:kartal/kartal.dart';
 import 'package:lingo/controller/riverpod/words_controller.dart';
 import 'package:lingo/view/screens/home/add_word_screen.dart';
+import 'package:lingo/view/theme/app_colors.dart';
 import 'package:search_page/search_page.dart';
 
 import '../../../data/model/word_model.dart';
@@ -44,7 +45,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("LİNGO", textAlign: TextAlign.center),
+        title: Text("Lingo", textAlign: TextAlign.center),
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
@@ -93,7 +94,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Padding(
       padding: context.padding.low,
       child: Card(
-        elevation: 2,
         child: Slidable(
           endActionPane: ActionPane(
             motion: ScrollMotion(),
@@ -122,33 +122,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ],
           ),
-          child: SizedBox(
-            child: ListTile(
-              titleAlignment: ListTileTitleAlignment.center,
-              onTap: () => _showDetail(context, isdata),
-              leading: IconButton(
-                onPressed: () async {
-                  ref
-                      .read(wordListNotifierProvider.notifier)
-                      .speak(isdata.word);
-                },
-                icon: Icon(
-                  Icons.volume_up_rounded,
-                  color: Colors.black,
-                ),
+          child: ListTile(
+            horizontalTitleGap: context.general.mediaQuery.size.width * 0.2,
+            titleAlignment: ListTileTitleAlignment.center,
+            onTap: () => _showDetail(context, isdata),
+            leading: IconButton(
+              onPressed: () async {
+                ref.read(wordListNotifierProvider.notifier).speak(isdata.word);
+              },
+              icon: Icon(
+                Icons.volume_up_rounded,
+                color: AppColors.appGeneralDarkGrey,
               ),
-              title: Center(
-                  child: CustomTextWidget(
-                text: isdata.word,
-                fontsize: context.general.textTheme.titleMedium?.fontSize,
-              )),
-              subtitle: Center(
-                child: CustomTextWidget(
-                  text: isdata.means,
-                  fontWeight: FontWeight.w100,
-                  fontsize: context.general.textTheme.titleMedium?.fontSize,
-                ),
-              ),
+            ),
+            title: CustomTextWidget(
+              text: isdata.word,
+              fontsize: context.general.textTheme.titleMedium?.fontSize,
+              fontWeight: FontWeight.w900,
+            ),
+            subtitle: CustomTextWidget(
+              text: isdata.means,
+              fontWeight: FontWeight.w500,
+              fontsize: context.general.textTheme.titleMedium?.fontSize,
             ),
           ),
         ),
@@ -161,19 +156,27 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          elevation: 20,
-          title: ListTile(
-            title: Text(words.word),
-            subtitle: Text(words.means),
+          backgroundColor: AppColors.appGeneralDarkGrey,
+          title: Card(
+            child: ListTile(
+              title: CustomTextWidget(text: words.word),
+              subtitle: CustomTextWidget(text: words.means),
+            ),
           ),
-          content: ListTile(
-            title: Text("Eş Anlamlısı"),
-            subtitle: Text(words.spouse ?? "Eş anlam ekleyin"),
+          content: Card(
+            child: ListTile(
+              title: CustomTextWidget(text: "Eş Anlamlısı"),
+              subtitle:
+                  CustomTextWidget(text: words.spouse ?? "Eş anlam ekleyin"),
+            ),
           ),
           actions: [
-            ListTile(
-              title: Text("Cumle içinde kullanımı"),
-              subtitle: Text(words.spouse ?? "Cumle ekleyin"),
+            Card(
+              child: ListTile(
+                title: CustomTextWidget(text: "Cumle içinde kullanımı"),
+                subtitle:
+                    CustomTextWidget(text: words.spouse ?? "Cumle ekleyin"),
+              ),
             ),
           ],
         );

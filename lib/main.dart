@@ -3,9 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:lingo/data/services/local_storage.dart';
-import 'package:lingo/view/theme/app_theme.dart';
- import 'package:lingo/controller/routes/router.dart' as route;
-
+import 'package:lingo/controller/routes/router.dart' as route;
 
 //D:\FlutterWork\lingo\lib\controller\routes\router.dart
 import 'data/model/word_model.dart';
@@ -35,10 +33,8 @@ class MyApp extends ConsumerWidget {
       initialRoute: route.Router.dashboard,
       onGenerateRoute: route.Router.generateRoute,
       theme: CustomAppTheme().theme,
-      darkTheme: AppTheme.dark,
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
-     
     );
   }
 }
