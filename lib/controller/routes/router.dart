@@ -4,6 +4,7 @@ import 'package:lingo/view/screens/home/add_word_screen.dart';
 import 'package:lingo/view/screens/home/home_screen.dart';
 import 'package:lingo/view/screens/profile/profile_screen.dart';
 import 'package:lingo/view/screens/quiz/Quiz_Screen.dart';
+import 'package:lingo/view/screens/quiz/mixed_quiz/mixed_quiz.dart';
 import 'package:lingo/view/screens/quiz/multiple_choice/multiple_choice_screen.dart';
 import 'package:lingo/view/screens/writing_exercises/writing_exercises_screen.dart';
 
@@ -15,6 +16,7 @@ class Router {
   static const String multipleChoice = '/multipleChoice';
   static const String profile = '/profile';
   static const String denemePage = '/writePage';
+  static const String mixedQuiz = '/mixedQuiz';
 
   static Route<RouteSettings> generateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
@@ -37,6 +39,9 @@ class Router {
       case '/writePage':
         return MaterialPageRoute(
             builder: (_) => const WritingExercisesScreen());
+
+      case '/mixedQuiz':
+        return MaterialPageRoute(builder: (_) => const MixedQuiz());
 
       default:
         return MaterialPageRoute(builder: (_) => const HomeScreen());

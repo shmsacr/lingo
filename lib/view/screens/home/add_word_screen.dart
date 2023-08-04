@@ -3,6 +3,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:lingo/controller/riverpod/words_controller.dart';
+import 'package:lingo/view/theme/app_colors.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:uuid/uuid.dart';
 
@@ -35,7 +36,7 @@ class _AddWordState extends ConsumerState<AddWord> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Yeni Kelime Ekle"),
-        backgroundColor: Color(0xf8f8f8),
+        backgroundColor: AppColors.appGeneralDarkGrey,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -46,10 +47,17 @@ class _AddWordState extends ConsumerState<AddWord> {
               key: _formKey,
               child: Column(
                 children: [
+                  SizedBox(height: 16.0),
                   FormBuilderTextField(
+                    style: TextStyle(color: AppColors.appGeneralDarkGrey),
                     name: "word",
                     initialValue: widget.myWords?.word,
-                    decoration: const InputDecoration(labelText: 'Kelime'),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Kelime',
+                      fillColor: Colors.white,
+                      filled: true,
+                    ),
                     validator: FormBuilderValidators.compose(
                       [
                         FormBuilderValidators.required(
@@ -59,9 +67,15 @@ class _AddWordState extends ConsumerState<AddWord> {
                   ),
                   const SizedBox(height: 16.0),
                   FormBuilderTextField(
+                    style: TextStyle(color: AppColors.appGeneralDarkGrey),
                     name: "means",
                     initialValue: widget.myWords?.means,
-                    decoration: const InputDecoration(labelText: 'Karşılığı'),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Karşılığı',
+                      fillColor: Colors.white,
+                      filled: true,
+                    ),
                     validator: FormBuilderValidators.compose(
                       [
                         FormBuilderValidators.required(
@@ -77,20 +91,30 @@ class _AddWordState extends ConsumerState<AddWord> {
                   ),
                   const SizedBox(height: 16.0),
                   FormBuilderTextField(
+                    style: TextStyle(color: AppColors.appGeneralDarkGrey),
                     name: "spouse",
                     initialValue: widget.myWords?.spouse,
-                    decoration: const InputDecoration(labelText: 'Eş Anlamı'),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Eş Anlamı',
+                      fillColor: Colors.white,
+                      filled: true,
+                    ),
                   ),
                   const SizedBox(height: 16.0),
                   FormBuilderTextField(
+                    style: TextStyle(color: AppColors.appGeneralDarkGrey),
                     name: "sentence",
                     initialValue: widget.myWords?.sentence,
                     decoration: const InputDecoration(
-                        labelText: 'Bir cumle icinde kullanımı'),
+                      border: OutlineInputBorder(),
+                      labelText: 'Bir cumle icinde kullanımı',
+                      fillColor: Colors.white,
+                      filled: true,
+                    ),
                   ),
                   const SizedBox(height: 25.0),
                   MaterialButton(
-                    color: Colors.green,
                     onPressed: () {
                       if (_formKey.currentState!.saveAndValidate()) {
                         final Words words = Words.fromJson({
@@ -106,6 +130,7 @@ class _AddWordState extends ConsumerState<AddWord> {
                         try {
                           wordCt.addWord(words);
                           if (context.mounted) {
+                            ScaffoldMessenger.of(context).clearSnackBars();
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                   content:
@@ -125,7 +150,8 @@ class _AddWordState extends ConsumerState<AddWord> {
                     },
                     child: Icon(
                       Icons.check,
-                      size: 50,
+                      color: Colors.white,
+                      size: 30,
                     ),
                   ),
                 ],

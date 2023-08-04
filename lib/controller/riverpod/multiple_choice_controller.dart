@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kartal/kartal.dart';
 
@@ -30,7 +31,7 @@ class QuizNotifier extends StateNotifier<QuizState> {
   int get correctAnswerCount => _correctAnswerCount;
   int get questionCount => _questionCount;
 
-  void fetchAndLoading() {
+  void fetchAndLoading() async {
     getQuizData();
     loadQuiz();
     resetQuiz();
@@ -50,7 +51,8 @@ class QuizNotifier extends StateNotifier<QuizState> {
   }
 
   Future<void> loadQuiz() async {
-    if (_wordMeansMapCopy.length <= 5 && _wordMeansMapCopy.ext.isNullOrEmpty)
+    debugPrint(_wordMeansMapCopy.length.toString());
+    if (_wordMeansMapCopy.length < 5 && _wordMeansMapCopy.ext.isNullOrEmpty)
       return;
     int randomIndex = _random.nextInt(_wordMeansMapCopy.length);
     _currentQuestion = _wordMeansMapCopy[randomIndex];

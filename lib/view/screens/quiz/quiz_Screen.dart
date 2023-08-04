@@ -26,12 +26,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                CustomTextWidget(
-                  text: StringConst.quizAppName,
-                  fontsize: context.general.textTheme.titleLarge?.fontSize,
-                ),
                 SizedBox(
-                  height: 170,
                   child: _QuizLearnCard(),
                 ),
                 SizedBox(
@@ -77,12 +72,6 @@ final class PracticalCard extends StatelessWidget {
       child: SizedBox(
         height: 120,
         child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-            side: BorderSide(
-              color: AppColors.darkTheme,
-            ),
-          ),
           child: Padding(
             padding: context.padding.onlyTopLow,
             child: ListTile(
@@ -112,21 +101,17 @@ final class _QuizLearnCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-        side: BorderSide(
-          color: AppColors.darkTheme,
-        ),
-      ),
       child: Padding(
         padding: context.padding.onlyTopNormal,
         child: Column(
           children: [
             _QuizAppTitle(),
             _Divider(),
-            _ListTileRow(
-              title: ref.watch(wordListNotifierProvider).length.toString(),
-            ),
+            Container(
+              child: _CustomQuizListTile(
+                  title: ref.watch(wordListNotifierProvider).length.toString(),
+                  subtitle: 'Toplam Kelime'),
+            )
           ],
         ),
       ),
@@ -153,27 +138,17 @@ final class _QuizAppTitle extends StatelessWidget {
   }
 }
 
-@immutable
-final class _ListTileRow extends StatelessWidget {
-  const _ListTileRow({
-    required this.title,
-  });
-  final String title;
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Expanded(
-            child: Padding(
-          padding: context.padding
-              .onlyLeftHigh, // PADDING DEĞİŞ EXPNADED KALKACAK, CENTER ALACAK
-          child: _CustomQuizListTile(title: title, subtitle: 'Toplam Kelime'),
-        )),
-      ],
-    );
-  }
-}
+// @immutable
+// final class _ListTileRow extends StatelessWidget {
+//   const _ListTileRow({
+//     required this.title,
+//   });
+//   final String title;
+//   @override
+//   Widget build(BuildContext context) {
+//     return _CustomQuizListTile(title: title, subtitle: 'Toplam Kelime');
+//   }
+// }
 
 @immutable
 final class _CustomQuizListTile extends StatelessWidget {
@@ -185,15 +160,18 @@ final class _CustomQuizListTile extends StatelessWidget {
   final String subtitle;
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: context.padding.onlyLeftMedium,
-      title: CustomTextWidget(
-        text: title,
-        fontsize: context.general.textTheme.titleMedium?.fontSize,
-      ),
-      subtitle: CustomTextWidget(
-        text: subtitle,
-        fontsize: context.general.textTheme.bodySmall?.fontSize,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 100),
+      child: ListTile(
+        contentPadding: context.padding.onlyLeftMedium,
+        title: CustomTextWidget(
+          text: title,
+          fontsize: context.general.textTheme.titleMedium?.fontSize,
+        ),
+        subtitle: CustomTextWidget(
+          text: subtitle,
+          fontsize: context.general.textTheme.bodySmall?.fontSize,
+        ),
       ),
     );
   }

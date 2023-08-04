@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lingo/controller/riverpod/dashboard_controller.dart';
 import 'package:lingo/view/screens/quiz/Quiz_Screen.dart';
-import 'package:lingo/view/theme/app_colors.dart';
 
 import 'home/home_screen.dart';
 import 'profile/profile_screen.dart';
@@ -29,22 +28,17 @@ class DashboardScreen extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           BottomNavigationBar(
-            unselectedIconTheme: IconThemeData(color: AppColors.cardDark),
-            unselectedItemColor: AppColors.cardDark,
-            selectedItemColor: Colors.white,
             iconSize: 30,
-            backgroundColor: AppColors.darkTheme,
             elevation: 10,
             items: [
               BottomNavigationBarItem(
-                backgroundColor: AppColors.lightTheme,
                 label: 'Ana Sayfa',
                 icon: Icon(
                   Icons.home,
                 ),
               ),
               BottomNavigationBarItem(
-                label: 'Test',
+                label: 'Quiz',
                 icon: Icon(
                   Icons.quiz,
                 ),
