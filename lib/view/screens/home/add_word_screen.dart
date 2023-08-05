@@ -23,13 +23,6 @@ class AddWord extends ConsumerStatefulWidget {
 class _AddWordState extends ConsumerState<AddWord> {
   final _formKey = GlobalKey<FormBuilderState>();
   final uuid = Uuid().v1();
-  late FocusNode _secondFieldFocusNode;
-
-  @override
-  void initState() {
-    super.initState();
-    _secondFieldFocusNode = FocusNode();
-  }
 
   @override
   void dispose() {
