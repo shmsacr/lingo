@@ -23,6 +23,13 @@ class AddWord extends ConsumerStatefulWidget {
 class _AddWordState extends ConsumerState<AddWord> {
   final _formKey = GlobalKey<FormBuilderState>();
   final uuid = Uuid().v1();
+  late FocusNode _secondFieldFocusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    _secondFieldFocusNode = FocusNode();
+  }
 
   @override
   void dispose() {
@@ -64,6 +71,9 @@ class _AddWordState extends ConsumerState<AddWord> {
                             errorText: "Bu alan boş bırakılamaz."),
                       ],
                     ),
+                    onEditingComplete: () {
+                      FocusScope.of(context).nextFocus();
+                    },
                   ),
                   const SizedBox(height: 16.0),
                   FormBuilderTextField(
@@ -88,6 +98,9 @@ class _AddWordState extends ConsumerState<AddWord> {
                               "*********************************************************",
                           filter: {"*": RegExp('[a-zA-ZğüşıöçĞÜŞİÖÇ ]')}),
                     ],
+                    onEditingComplete: () {
+                      FocusScope.of(context).nextFocus();
+                    },
                   ),
                   const SizedBox(height: 16.0),
                   FormBuilderTextField(
@@ -100,6 +113,9 @@ class _AddWordState extends ConsumerState<AddWord> {
                       fillColor: Colors.white,
                       filled: true,
                     ),
+                    onEditingComplete: () {
+                      FocusScope.of(context).nextFocus();
+                    },
                   ),
                   const SizedBox(height: 16.0),
                   FormBuilderTextField(
