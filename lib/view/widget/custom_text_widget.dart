@@ -21,7 +21,9 @@ class CustomTextWidget extends StatelessWidget {
       style: TextStyle(
         fontSize: fontsize ?? context.general.textTheme.bodyMedium?.fontSize,
         fontWeight: fontWeight ?? FontWeight.w600,
-        color: color ?? AppColors.appGeneralDarkGrey,
+        color: context.general.appBrightness == Brightness.light
+            ? color ?? AppColors.appGeneralDarkGrey
+            : color ?? AppColors.appGeneralLigthGrey,
       ),
     );
   }
