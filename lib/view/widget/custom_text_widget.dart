@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kartal/kartal.dart';
-import 'package:lingo/view/theme/app_colors.dart';
 
 class CustomTextWidget extends StatelessWidget {
   const CustomTextWidget(
@@ -19,12 +18,12 @@ class CustomTextWidget extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
-        fontSize: fontsize ?? context.general.textTheme.bodyMedium?.fontSize,
-        fontWeight: fontWeight ?? FontWeight.w600,
-        color: context.general.appBrightness == Brightness.light
-            ? color ?? AppColors.appGeneralDarkGrey
-            : color ?? AppColors.appGeneralLigthGrey,
-      ),
+          fontSize: fontsize ?? context.general.textTheme.bodyMedium?.fontSize,
+          fontWeight: fontWeight ?? FontWeight.w600,
+          color: color ??
+              (context.general.appBrightness == Brightness.dark
+                  ? Colors.red
+                  : Colors.yellow)),
     );
   }
 }
