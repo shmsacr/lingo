@@ -5,7 +5,10 @@ import 'package:lingo/view/theme/app_colors.dart';
 class CustomAppTheme {
   ThemeData get theme => ThemeData.light().copyWith(
         scaffoldBackgroundColor: AppColors.appGeneralDarkGrey,
-        textTheme: GoogleFonts.poppinsTextTheme(),
+        textTheme: GoogleFonts.poppinsTextTheme(
+          
+        ),
+        
 
         ///bottomNavigationBarTheme
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
