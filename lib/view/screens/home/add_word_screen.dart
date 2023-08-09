@@ -36,7 +36,7 @@ class _AddWordState extends ConsumerState<AddWord> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Yeni Kelime Ekle"),
-        backgroundColor: AppColors.appGeneralDarkGrey,
+        backgroundColor: AppColors.appBlue,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -49,7 +49,7 @@ class _AddWordState extends ConsumerState<AddWord> {
                 children: [
                   SizedBox(height: 16.0),
                   FormBuilderTextField(
-                    style: TextStyle(color: AppColors.appGeneralDarkGrey),
+                    style: TextStyle(color: AppColors.appBlue),
                     name: "word",
                     initialValue: widget.myWords?.word,
                     decoration: const InputDecoration(
@@ -70,7 +70,7 @@ class _AddWordState extends ConsumerState<AddWord> {
                   ),
                   const SizedBox(height: 16.0),
                   FormBuilderTextField(
-                    style: TextStyle(color: AppColors.appGeneralDarkGrey),
+                    style: TextStyle(color: AppColors.appBlue),
                     name: "means",
                     initialValue: widget.myWords?.means,
                     decoration: const InputDecoration(
@@ -97,7 +97,7 @@ class _AddWordState extends ConsumerState<AddWord> {
                   ),
                   const SizedBox(height: 16.0),
                   FormBuilderTextField(
-                    style: TextStyle(color: AppColors.appGeneralDarkGrey),
+                    style: TextStyle(color: AppColors.appBlue),
                     name: "spouse",
                     initialValue: widget.myWords?.spouse,
                     decoration: const InputDecoration(
@@ -112,7 +112,7 @@ class _AddWordState extends ConsumerState<AddWord> {
                   ),
                   const SizedBox(height: 16.0),
                   FormBuilderTextField(
-                    style: TextStyle(color: AppColors.appGeneralDarkGrey),
+                    style: TextStyle(color: AppColors.appBlue),
                     name: "sentence",
                     initialValue: widget.myWords?.sentence,
                     decoration: const InputDecoration(
@@ -159,7 +159,7 @@ class _AddWordState extends ConsumerState<AddWord> {
                     },
                     child: Icon(
                       Icons.check,
-                      color: Colors.white,
+                      color: AppColors.appBlue,
                       size: 30,
                     ),
                   ),

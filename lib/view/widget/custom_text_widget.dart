@@ -22,8 +22,8 @@ class CustomTextWidget extends StatelessWidget {
           fontWeight: fontWeight ?? FontWeight.w600,
           color: color ??
               (context.general.appBrightness == Brightness.dark
-                  ? Colors.red
-                  : Colors.yellow)),
+                  ? Color(0xFF0081A8)
+                  : Color(0xFF0081A8))),
     );
   }
 }

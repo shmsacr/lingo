@@ -129,10 +129,9 @@ class _WritingExercisesScreenState
                                 onPressed: () {
                                   randomIndex.state = Random().nextInt(2);
                                   print(randomIndex.state);
-                                  ref.refresh(randomWordProvider);
+                                  ref.invalidate(randomWordProvider);
                                   myController.clear();
 
-                                  // Cevap kontrolü ve sonraki kelimeye geçiş işlemleri burada yapılabilir.
                                 },
                                 style: TextButton.styleFrom(
                                   shape: RoundedRectangleBorder(

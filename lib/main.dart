@@ -4,9 +4,8 @@ import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:lingo/controller/routes/router.dart' as route;
 import 'package:lingo/data/services/local_storage.dart';
-import 'package:lingo/view/theme/app_theme.dart';
+import 'package:lingo/view/theme/custom_theme.dart';
 
-//D:\FlutterWork\lingo\lib\controller\routes\router.dart
 import 'data/model/word_model.dart';
 
 final locator = GetIt.instance;
@@ -32,8 +31,8 @@ class MyApp extends ConsumerWidget {
     return MaterialApp(
       initialRoute: route.Router.dashboard,
       onGenerateRoute: route.Router.generateRoute,
-      theme: AppTheme.light,
-      darkTheme: AppTheme.dark,
+      theme: CustomAppTheme().themeLight,
+      darkTheme: CustomAppTheme().themeDark,
       debugShowCheckedModeBanner: false,
     );
   }

@@ -147,7 +147,7 @@ class _TrueFalseScreenState extends ConsumerState<TrueFalseScreen> {
                                     },
                                     icon: Icon(
                                       Icons.check_circle,
-                                      color: Colors.white,
+                                      color: Colors.green,
                                       size: 50,
                                     ),
                                   ),
