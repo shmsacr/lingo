@@ -6,8 +6,8 @@ part 'word_model.g.dart';
 
 @freezed
 @HiveType(typeId: 0)
+@JsonSerializable(explicitToJson: true)
 class Words with _$Words {
-  @JsonSerializable(explicitToJson: true)
   @HiveField(0)
   const factory Words({
     @HiveField(1) required final String id,

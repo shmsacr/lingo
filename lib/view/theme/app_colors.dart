@@ -17,7 +17,9 @@ final class AppColors {
 
   static const Color appGeneralDarkGrey = Color(0xFF00a08c);
   static const Color appGeneralLigthGrey = Color(0xFF2db5a4);
-//  #6acdc2
-//  static const Color appGeneralLigth = Color(0xFF6acdc2); 
 
+  static const Color appBlue = Color(0xFF0081A8);
+
+//  #6acdc2
+//  static const Color appGeneralLigth = Color(0xFF6acdc2);
 }
