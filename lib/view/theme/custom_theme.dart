@@ -4,6 +4,7 @@ import 'package:lingo/view/theme/app_colors.dart';
 
 class CustomAppTheme {
   ThemeData get themeLight => ThemeData.light().copyWith(
+        scaffoldBackgroundColor: AppColors.backgroundLight,
         textTheme: GoogleFonts.poppinsTextTheme(),
 
         ///bottomNavigationBarTheme
@@ -31,7 +32,7 @@ class CustomAppTheme {
         ///cardTheme
         cardTheme: CardTheme(
           elevation: 3,
-          color: Color(0xFFd7ecf9),
+          color: Colors.white,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8), side: BorderSide.none),
         ),
@@ -52,15 +53,13 @@ class CustomAppTheme {
         ),
       );
 
-
-
-
-       ThemeData get themeDark => ThemeData.dark().copyWith(
+  ThemeData get themeDark => ThemeData.dark().copyWith(
         textTheme: GoogleFonts.poppinsTextTheme(),
+        scaffoldBackgroundColor: AppColors.backgroundDark,
 
         ///bottomNavigationBarTheme
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          backgroundColor: Color(0xFF0081A8),
+          backgroundColor: Color(0xff072027),
           selectedIconTheme: const IconThemeData(
             color: Colors.white,
           ),
@@ -70,7 +69,7 @@ class CustomAppTheme {
 
         ///appBarTheme
         appBarTheme: const AppBarTheme(
-          backgroundColor: AppColors.appBlue,
+          backgroundColor: Color(0xff325660),
           iconTheme: IconThemeData(color: Colors.white),
           titleTextStyle: TextStyle(
             color: Colors.white,
@@ -83,7 +82,7 @@ class CustomAppTheme {
         ///cardTheme
         cardTheme: CardTheme(
           elevation: 3,
-          color: Color(0xFFd7ecf9),
+          color: AppColors.cardDark,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8), side: BorderSide.none),
         ),
