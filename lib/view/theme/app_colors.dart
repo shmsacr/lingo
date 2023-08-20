@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 final class AppColors {
   const AppColors._();
   static const Color primary = Color(0xff105694);
+  static const Color backgroundLight = Colors.white;
+  static const Color backgroundDark = Color(0xff003344);
 
-  static const Color cardDark = Color(0xFF303334);
+  static const Color cardDark = Color(0xff325660);
   static const Color cardLight = Color(0xFFF9FAFE);
 
   static const Color green = Color.fromARGB(255, 3, 138, 59);
