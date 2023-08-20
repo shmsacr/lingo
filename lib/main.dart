@@ -6,6 +6,7 @@ import 'package:lingo/controller/routes/router.dart' as route;
 import 'package:lingo/data/services/local_storage.dart';
 import 'package:lingo/view/theme/custom_theme.dart';
 
+import 'controller/theme_controller.dart';
 import 'data/model/word_model.dart';
 
 final locator = GetIt.instance;
@@ -31,8 +32,9 @@ class MyApp extends ConsumerWidget {
     return MaterialApp(
       initialRoute: route.Router.dashboard,
       onGenerateRoute: route.Router.generateRoute,
-      theme: CustomAppTheme().themeLight,
-      darkTheme: CustomAppTheme().themeDark,
+      theme: ref.watch(themeProvider)
+          ? CustomAppTheme().themeDark
+          : CustomAppTheme().themeLight,
       debugShowCheckedModeBanner: false,
     );
   }
