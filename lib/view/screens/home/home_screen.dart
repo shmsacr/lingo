@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:kartal/kartal.dart';
 import 'package:lingo/controller/riverpod/words_controller.dart';
+import 'package:lingo/controller/theme_controller.dart';
 import 'package:lingo/view/screens/home/add_word_screen.dart';
 import 'package:lingo/view/theme/app_colors.dart';
 import 'package:search_page/search_page.dart';
@@ -26,6 +27,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     final wordList = ref.watch(wordListNotifierProvider);
     final seacrhList = ref.watch(wordListNotifierProvider);
+    bool isDarkTheme = ref.watch(themeProvider);
 
     // Widget _checkIsLoadingAndIsListEmpty() {
     //   if (_isLoading == true) {
@@ -81,7 +83,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               children: [
                 Positioned(
                   child: Container(
-                    color: Color(0xFF0081A8),
+                    color: isDarkTheme ? Color(0xff072027) : Color(0xFF0081A8),
                   ),
                 ),
                 Positioned(
@@ -115,7 +117,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   right: 0,
                   child: Card(
                     margin: EdgeInsets.zero,
-                    color: Colors.white,
+                    color: ref.watch(themeProvider)
+                        ? Color(0xff003344)
+                        : Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(30),
@@ -187,7 +191,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
       child: Card(
         elevation: 10,
-        color: Colors.white,
         child: ListTile(
           horizontalTitleGap: context.general.mediaQuery.size.width * 0.2,
           titleAlignment: ListTileTitleAlignment.center,
