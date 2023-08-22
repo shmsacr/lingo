@@ -18,12 +18,12 @@ class CustomTextWidget extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
-          fontSize: fontsize ?? context.general.textTheme.bodyMedium?.fontSize,
+          fontSize: fontsize ?? context.general.textTheme.titleLarge?.fontSize,
           fontWeight: fontWeight ?? FontWeight.w600,
           color: color ??
               (context.general.appBrightness == Brightness.dark
-                  ? Color(0xFF0081A8)
-                  : Color(0xFF0081A8))),
+                  ? Colors.red
+                  : Color(0xFF0081A8).withOpacity(0.8))),
     );
   }
 }
