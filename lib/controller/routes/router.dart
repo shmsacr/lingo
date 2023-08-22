@@ -4,6 +4,7 @@ import 'package:lingo/view/screens/home/add_word_screen.dart';
 import 'package:lingo/view/screens/home/home_screen.dart';
 import 'package:lingo/view/screens/profile/profile_screen.dart';
 import 'package:lingo/view/screens/quiz/Quiz_Screen.dart';
+import 'package:lingo/view/screens/quiz/listening_quiz/listeningScreen.dart';
 import 'package:lingo/view/screens/quiz/mixed_quiz/mixed_quiz.dart';
 import 'package:lingo/view/screens/quiz/multiple_choice/multiple_choice_screen.dart';
 import 'package:lingo/view/screens/quiz/true_false_quiz/true_false_screen.dart';
@@ -43,6 +44,9 @@ class Router {
             builder: (_) => const WritingExercisesScreen());
       case '/trueFalse':
         return MaterialPageRoute(builder: (_) => const TrueFalseScreen());
+
+      case '/listening':
+        return MaterialPageRoute(builder: (_) => const ListeningScreen());
 
       case '/mixedQuiz':
         return MaterialPageRoute(builder: (_) => const MixedQuiz());
