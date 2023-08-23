@@ -18,6 +18,7 @@ class DashboardScreen extends ConsumerWidget {
   ];
 
   List get screens => _screens;
+  List get labelList => ["Ana Sayfa", "Test", "Profil"];
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final index = ref.watch(dashboardIndexProvider);
