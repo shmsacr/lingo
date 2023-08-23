@@ -3,11 +3,13 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:lingo/controller/riverpod/words_controller.dart';
+import 'package:lingo/view/screens/suggested/suggested_screen.dart';
 import 'package:lingo/view/theme/app_colors.dart';
+import 'package:lingo/view/widget/custom_text_widget.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../data/model/word_model.dart';
+import '../../../../data/model/word_model.dart';
 
 class AddWord extends ConsumerStatefulWidget {
   final Words? myWords;
@@ -35,8 +37,22 @@ class _AddWordState extends ConsumerState<AddWord> {
     final wordCt = ref.read(wordListNotifierProvider.notifier);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Yeni Kelime Ekle"),
+        title: Text("Kelime Ekle"),
         backgroundColor: AppColors.appBlue,
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute<Widget>(
+                      builder: (context) => SuggestedScreen(),
+                    ));
+              },
+              child: CustomTextWidget(
+                text: 'Kelime Önerileri',
+                color: Colors.white,
+              ))
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),

@@ -30,10 +30,11 @@ class CustomAppTheme {
 
         ///cardTheme
         cardTheme: CardTheme(
-          elevation: 3,
-          color: Color(0xFFd7ecf9),
+          elevation: 5,
+          color: Colors.white,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8), side: BorderSide.none),
+            borderRadius: BorderRadius.circular(8),
+          ),
         ),
 
         ///iconTheme
@@ -52,10 +53,7 @@ class CustomAppTheme {
         ),
       );
 
-
-
-
-       ThemeData get themeDark => ThemeData.dark().copyWith(
+  ThemeData get themeDark => ThemeData.dark().copyWith(
         textTheme: GoogleFonts.poppinsTextTheme(),
 
         ///bottomNavigationBarTheme

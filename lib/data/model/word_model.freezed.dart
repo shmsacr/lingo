@@ -162,8 +162,7 @@ class __$$_WordsCopyWithImpl<$Res> extends _$WordsCopyWithImpl<$Res, _$_Words>
 }
 
 /// @nodoc
-
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable()
 @HiveField(0)
 class _$_Words implements _Words {
   const _$_Words(

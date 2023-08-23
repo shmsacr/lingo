@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lingo/view/screens/dashboard.dart';
-import 'package:lingo/view/screens/home/add_word_screen.dart';
+import 'package:lingo/view/screens/home/add_word_screen/add_word_screen.dart';
 import 'package:lingo/view/screens/home/home_screen.dart';
 import 'package:lingo/view/screens/profile/profile_screen.dart';
 import 'package:lingo/view/screens/quiz/Quiz_Screen.dart';
