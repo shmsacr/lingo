@@ -11,6 +11,8 @@ final class SearchControllerNotifier extends StateNotifier<SearchState> {
 
   final searchList = <Words>[];
 
+  // denenecek
+
   void changeSearch() {
     state = state.copyWith(isSearch: !state.isSearch);
   }
