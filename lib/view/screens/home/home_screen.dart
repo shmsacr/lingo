@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:kartal/kartal.dart';
+import 'package:lingo/controller/riverpod/search_text_field.controller.dart';
+import 'package:lingo/controller/riverpod/search_words_controller.dart';
 import 'package:lingo/controller/riverpod/words_controller.dart';
-import 'package:lingo/controller/theme_controller.dart';
-import 'package:lingo/view/screens/home/add_word_screen.dart';
+import 'package:lingo/view/screens/home/add_word_screen/add_word_screen.dart';
 import 'package:lingo/view/theme/app_colors.dart';
-import 'package:search_page/search_page.dart';
 
 import '../../../data/model/word_model.dart';
 import '../../widget/custom_text_widget.dart';
@@ -19,145 +19,110 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  final TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    // final _fetchWordsUpdate = ref.watch(wordListNotifier).words;
-    // final _wordProviderNotifier = ref.read(wordListNotifier.notifier);
-    // final _isLoading = ref.watch(wordListNotifier).isLoading;
+    var wordList = ref.watch(wordListNotifierProvider);
+    var searchList = ref.watch(searchProvider.notifier).searchList;
+    var isSearch = ref.watch(searchProvider).isSearch;
 
-    final wordList = ref.watch(wordListNotifierProvider);
-    final seacrhList = ref.watch(wordListNotifierProvider);
-    bool isDarkTheme = ref.watch(themeProvider);
-
-    // Widget _checkIsLoadingAndIsListEmpty() {
-    //   if (_isLoading == true) {
-    //     return Center(
-    //       child: CircularProgressIndicator(
-    //         color: AppColors.darkTheme,
-    //       ),
-    //     );
-    //   } else if (_fetchWordsUpdate?.isEmpty == true) {
-    //     return Center(child: CustomTextWidget(text: 'Kelime Ekleyiniz'));
-    //   } else {
-    //     return _HomeBody(
-    //         fetchWordsUpdate: _fetchWordsUpdate,
-    //         wordProviderNotifier: _wordProviderNotifier);
-    //   }
-    // }
+   // var deneme = "";
 
     return Scaffold(
-      // appBar: AppBar(
-      //   toolbarHeight: 100,
-      //   title: Text("Lingo", textAlign: TextAlign.center),
-      //   centerTitle: true,
-      //   leading: IconButton(
-      //     onPressed: () {
-      //       Navigator.pushNamed(context, '/addWord');
-      //     },
-      //     icon: Icon(Icons.add),
-      //   ),
-      //   actions: [
-      //     IconButton(
-      //       onPressed: () => showSearch(
-      //           context: context,
-      //           delegate: SearchPage(
-      //             onQueryUpdate: print,
-      //             items: seacrhList,
-      //             searchLabel: 'Search people',
-      //             suggestion: const Center(
-      //               child: Text('Filter people by name, surname or age'),
-      //             ),
-      //             builder: (searchWord) =>
-      //                 buildPadding(context, ref, searchWord),
-      //             filter: (searchWord) => [searchWord.means, searchWord.word],
-      //           )),
-      //       icon: Icon(Icons.search),
-      //     ),
-      //   ],
-      // ),
-      body: wordList.isEmpty
-          ? Center(
-              child: Text("Kelime ekleyin"),
-            )
-          : Stack(
-              children: [
-                Positioned(
-                  child: Container(
-                    color: isDarkTheme ? Color(0xff072027) : Color(0xFF0081A8),
-                  ),
-                ),
-                Positioned(
-                  top: 15,
-                  left: context.general.mediaQuery.size.width * 0.9,
-                  right: 0,
-                  child: IconButton(
-                    onPressed: () => showSearch(
-                      context: context,
-                      delegate: SearchPage(
-                          onQueryUpdate: print,
-                          items: seacrhList,
-                          searchLabel: 'Search people',
-                          suggestion: const Center(
-                            child:
-                                Text('Filter people by name, surname or age'),
-                          ),
-                          builder: (searchWord) =>
-                              buildPadding(context, ref, searchWord),
-                          filter: (searchWord) =>
-                              [searchWord.means, searchWord.word]),
+      body: Stack(
+        children: [
+          Positioned(
+            child: Container(color: AppColors.appBlue),
+          ),
+          Positioned(
+            top: 15,
+            left: context.general.mediaQuery.size.width * 0.8,
+            right: 0,
+            child: IconButton(
+              icon: isSearch
+                  ? Icon(
+                      Icons.close,
+                      color: Colors.white,
+                    )
+                  : Icon(
+                      Icons.search,
+                      color: Colors.white,
                     ),
-                    icon: Icon(Icons.search),
-                  ),
-                ),
-                _AddWordIconButton(),
-                _TextLingoTitle(),
-                Positioned(
-                  top: 80,
-                  left: 0,
-                  right: 0,
-                  child: Card(
-                    margin: EdgeInsets.zero,
-                    color: ref.watch(themeProvider)
-                        ? Color(0xff003344)
-                        : Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30),
-                      ),
-                    ),
-                    child: Container(
-                      height: MediaQuery.of(context).size.height,
-                      child: Padding(
-                        padding: context.padding.low,
-                        child: ListView.builder(
-                          itemCount: wordList.length,
-                          itemBuilder: (context, index) {
-                            final isdata = wordList[index];
-                            return buildPadding(context, ref, isdata);
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+              onPressed: () {
+                ref.read(searchProvider.notifier).changeSearch();
+                ref.read(searchProvider.notifier).searchList.clear();
+              },
             ),
-      // wordList.isEmpty
-      //     ? Center(child: Text("Kelime ekleyin"))
-      //     : Padding(
-      //         padding: context.padding.onlyLeftNormal,
-      //         child: SizedBox(
-      //           width: context.general.mediaQuery.size.width * 0.9,
-      //           child: ListView.builder(
-      //             itemCount: wordList.length,
-      //             itemBuilder: (context, index) {
-      //               final isdata = wordList[index];
-      //               return buildPadding(context, ref, isdata);
-      //             },
-      //           ),
-      //         ),
-      //       ),
+          ),
+          _AddWordIconButton(),
+          isSearch ? BuildTextField() : _TextLingoTitle(),
+          if (wordList.isNotEmpty && !isSearch)
+            Positioned(
+              top: 80,
+              left: 0,
+              right: 0,
+              child: Card(
+                margin: EdgeInsets.zero,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                  ),
+                ),
+                child: Container(
+                  height: MediaQuery.of(context).size.height,
+                  child: Padding(
+                    padding: context.padding.low,
+                    child: ListView.builder(
+                      itemCount: wordList.length,
+                      itemBuilder: (context, index) {
+                        final isdata = wordList[index];
+                        return buildPadding(context, ref, isdata);
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            )
+          else if (searchList.isNotEmpty && isSearch)
+            Positioned(
+              top: 80,
+              left: 0,
+              right: 0,
+              child: Card(
+                margin: EdgeInsets.zero,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                  ),
+                ),
+                child: Container(
+                  height: MediaQuery.of(context).size.height,
+                  child: Padding(
+                    padding: context.padding.low,
+                    child: ListView.builder(
+                      itemCount: searchList.length,
+                      itemBuilder: (context, index) {
+                        final isdata = searchList[index];
+                        return buildPadding(context, ref, isdata);
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            )
+          else
+            Center(
+              child: CustomTextWidget(
+                text: 'No result found',
+                fontsize: 24,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+        ],
+      ),
     );
   }
 
@@ -167,7 +132,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         motion: ScrollMotion(),
         children: [
           SlidableAction(
-            onPressed: (context) {
+            onPressed: (_) {
               ref.read(wordListNotifierProvider.notifier).deleteWord(isdata);
             },
             backgroundColor: Colors.red,
@@ -192,16 +157,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       child: Card(
         elevation: 10,
         child: ListTile(
-          horizontalTitleGap: context.general.mediaQuery.size.width * 0.2,
+          contentPadding: EdgeInsets.symmetric(horizontal: 40),
           titleAlignment: ListTileTitleAlignment.center,
-          onTap: () => _showDetail(context, isdata),
-          leading: IconButton(
+          onTap: () => _showBottomSheet(isdata),
+          trailing: IconButton(
             onPressed: () async {
               ref.read(wordListNotifierProvider.notifier).speak(isdata.word);
             },
             icon: Icon(
               Icons.volume_up_rounded,
-              color: AppColors.appGeneralDarkGrey,
+              color: AppColors.appBlue,
             ),
           ),
           title: CustomTextWidget(
@@ -219,45 +184,153 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  Future<void> _showDetail(BuildContext context, Words words) async {
-    return await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: AppColors.appGeneralDarkGrey,
-          title: Card(
-            child: ListTile(
-              title: CustomTextWidget(text: words.word),
-              subtitle: CustomTextWidget(text: words.means),
+  Future<void> _showBottomSheet(Words words) async {
+    return await showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        context: context,
+        builder: (BuildContext context) {
+          return ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
             ),
-          ),
-          content: Card(
-            child: ListTile(
-              title: CustomTextWidget(text: "Eş Anlamlısı"),
-              subtitle:
-                  CustomTextWidget(text: words.spouse ?? "Eş anlam ekleyin"),
-            ),
-          ),
-          actions: [
-            Card(
-              child: ListTile(
-                title: CustomTextWidget(text: "Cumle içinde kullanımı"),
-                subtitle:
-                    CustomTextWidget(text: words.spouse ?? "Cumle ekleyin"),
+            child: Container(
+              color: AppColors.appBlue,
+              height: context.general.mediaQuery.size.height * 0.5,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  ListTile(
+                    title: Center(
+                      child: CustomTextWidget(
+                        text: words.word,
+                        color: Colors.white,
+                        fontsize:
+                            context.general.textTheme.headlineSmall?.fontSize,
+                      ),
+                    ),
+                    subtitle: Center(
+                      child: CustomTextWidget(
+                        text: words.means,
+                        color: Colors.white,
+                        fontsize:
+                            context.general.textTheme.headlineSmall?.fontSize,
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.white,
+                  ),
+                  ListTile(
+                    title: CustomTextWidget(text: "Words"),
+                    subtitle: CustomTextWidget(
+                      text: words.spouse ?? "Words Eş anlamı yok",
+                      color: Colors.white,
+                    ),
+                    trailing: IconButton(
+                      onPressed: () {
+                        ref
+                            .read(wordListNotifierProvider.notifier)
+                            .speak(words.word);
+                      },
+                      icon: Icon(
+                        Icons.volume_up_rounded,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.white,
+                  ),
+                  ListTile(
+                    title: CustomTextWidget(text: "Cümle içinde kullanımı"),
+                    subtitle: CustomTextWidget(
+                      text: words.spouse ??
+                          "This is a wordThis is a wordThis is a wordThis is a wordThis is a wordThis is a wordThis is a wordThis is a wordThis is a wordThis is a wordThis is a word",
+                      color: Colors.white,
+                    ),
+                    trailing: IconButton(
+                      onPressed: () {
+                        ref
+                            .read(wordListNotifierProvider.notifier)
+                            .speak(words.word);
+                      },
+                      icon: Icon(
+                        Icons.volume_up_rounded,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        );
-      },
+          );
+        });
+  }
+}
+
+class BuildTextField extends ConsumerStatefulWidget {
+  const BuildTextField({super.key});
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _BuildTextFieldState();
+}
+
+class _BuildTextFieldState extends ConsumerState<BuildTextField> {
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: context.general.mediaQuery.size.height * 0.02,
+      right: 0,
+      left: 0,
+      child: Align(
+          alignment: Alignment.center,
+          child: Container(
+            alignment: Alignment.center,
+            width: context.general.mediaQuery.size.width * 0.7,
+            height: context.general.mediaQuery.size.height * 0.06,
+            child: TextField(
+              onEditingComplete: () {
+                ref.watch(searchTextFieldProvider.notifier).changeSearch();
+              },
+              onChanged: (value) {
+                ref
+                    .watch(searchProvider.notifier)
+                    .searchWords(value, ref.watch(wordListNotifierProvider));
+              },
+              style: TextStyle(color: AppColors.appBlue),
+              decoration: _textFieldDecoration(context),
+            ),
+          )),
+    );
+  }
+
+  InputDecoration _textFieldDecoration(BuildContext context) {
+    return InputDecoration(
+      contentPadding:
+          EdgeInsets.symmetric(horizontal: context.padding.normal.horizontal),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide.none,
+      ),
+      fillColor: Colors.white,
+      filled: true,
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(color: Colors.white),
+      ),
+      hintText: 'Search',
+      hintStyle: TextStyle(color: AppColors.appBlue),
     );
   }
 }
 
-class _TextLingoTitle extends StatelessWidget {
+class _TextLingoTitle extends ConsumerWidget {
   const _TextLingoTitle();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Positioned(
       top: context.general.mediaQuery.size.height * 0.02,
       right: 0,

@@ -60,4 +60,5 @@ flutter:
   
   assets:
     - assets/icons/
+    - assets/json/
 
