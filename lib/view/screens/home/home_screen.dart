@@ -26,6 +26,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     var searchList = ref.watch(searchProvider.notifier).searchList;
     var isSearch = ref.watch(searchProvider).isSearch;
 
+   // var deneme = "";
+
     return Scaffold(
       body: Stack(
         children: [
