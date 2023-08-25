@@ -8,6 +8,7 @@ abstract class LocalStroge {
   Future<bool> deleteWord({required Words word});
   Future<Words> updateWord({required Words word});
 }
+//deneme
 
 class HiveLocalStroge extends LocalStroge {
   final String boxName = 'words_box';

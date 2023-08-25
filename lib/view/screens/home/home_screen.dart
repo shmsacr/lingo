@@ -4,6 +4,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:kartal/kartal.dart';
 import 'package:lingo/controller/riverpod/search_delegate.dart';
 import 'package:lingo/controller/riverpod/search_text_field.controller.dart';
+import 'package:lingo/controller/riverpod/speaker_controller.dart';
 
 import 'package:lingo/controller/riverpod/words_controller.dart';
 import 'package:lingo/view/screens/home/add_word_screen/add_word_screen.dart';
@@ -128,7 +129,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           onTap: () => _showBottomSheet(isdata),
           trailing: IconButton(
             onPressed: () async {
-              ref.read(wordListNotifierProvider.notifier).speak(isdata.word);
+                   speak(isdata.word);
             },
             icon: Icon(
               Icons.volume_up_rounded,
@@ -196,9 +197,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                     trailing: IconButton(
                       onPressed: () {
-                        ref
-                            .read(wordListNotifierProvider.notifier)
-                            .speak(words.word);
+                       speak(words.word);
                       },
                       icon: Icon(
                         Icons.volume_up_rounded,
@@ -218,9 +217,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                     trailing: IconButton(
                       onPressed: () {
-                        ref
-                            .read(wordListNotifierProvider.notifier)
-                            .speak(words.word);
+                          speak(words.word);
                       },
                       icon: Icon(
                         Icons.volume_up_rounded,
@@ -261,7 +258,7 @@ class _BuildTextFieldState extends ConsumerState<BuildTextField> {
                 ref.watch(searchTextFieldProvider.notifier).changeSearch();
               },
               onChanged: (value) {
-                ref.watch(wordListNotifierProvider.notifier).filterWords(value);
+             //   ref.watch(wordListNotifierProvider.notifier).filterWords(value);
               },
               style: TextStyle(color: AppColors.appBlue),
               decoration: _textFieldDecoration(context),

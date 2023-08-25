@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kartal/kartal.dart';
-import 'package:lingo/controller/riverpod/words_controller.dart';
+import 'package:lingo/controller/riverpod/speaker_controller.dart';
 import 'package:lingo/data/model/word_model.dart';
 import 'package:lingo/view/theme/app_colors.dart';
 import 'package:lingo/view/widget/custom_text_widget.dart';
@@ -58,7 +58,7 @@ class SearchWords extends SearchDelegate<Words> {
             // onTap: () => _showBottomSheet(isdata),
             trailing: IconButton(
               onPressed: () async {
-                ref.read(wordListNotifierProvider.notifier).speak(isdata!.word);
+                speak(isdata!.word);
               },
               icon: Icon(
                 Icons.volume_up_rounded,
@@ -107,7 +107,7 @@ class SearchWords extends SearchDelegate<Words> {
             // onTap: () => _showBottomSheet(isdata),
             trailing: IconButton(
               onPressed: () async {
-                ref.read(wordListNotifierProvider.notifier).speak(isdata!.word);
+                speak(isdata!.word);
               },
               icon: Icon(
                 Icons.volume_up_rounded,
