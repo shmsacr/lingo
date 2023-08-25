@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kartal/kartal.dart';
+import 'package:lingo/controller/riverpod/speaker_controller.dart';
 import 'package:lingo/controller/riverpod/suggested_words_controller.dart';
-import 'package:lingo/controller/riverpod/words_controller.dart';
 import 'package:lingo/view/theme/app_colors.dart';
 import 'package:lingo/view/widget/custom_text_widget.dart';
 
@@ -50,9 +50,7 @@ class _SuggestedScreenState extends ConsumerState<SuggestedScreen> {
                       //onTap: () => _showBottomSheet(isdata),
                       trailing: IconButton(
                         onPressed: () async {
-                          ref
-                              .read(wordListNotifierProvider.notifier)
-                              .speak(_suggestedCt?[index].eng ?? "");
+                          speak(_suggestedCt?[index].eng ?? "");
                         },
                         icon: Icon(
                           Icons.volume_up_rounded,

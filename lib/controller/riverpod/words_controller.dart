@@ -12,6 +12,8 @@ class WordListNotifier extends StateNotifier<List<Words>> {
     getAllWords();
   }
 
+  List<Words> filteredWords = [];
+
   Future<List<Words>> getAllWords() async {
     final localStorage = HiveLocalStroge();
     final words = await localStorage.getAllWords();
