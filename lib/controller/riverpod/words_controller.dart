@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:lingo/data/model/word_model.dart';
 import 'package:lingo/data/services/local_storage.dart';
 
@@ -32,12 +31,5 @@ class WordListNotifier extends StateNotifier<List<Words>> {
     if (success) {
       state = state.where((w) => w.id != word.id).toList();
     }
-  }
-
-  void speak(String text) async {
-    final sountTTS = FlutterTts();
-    await sountTTS.setLanguage("en-US");
-    await sountTTS.setPitch(1);
-    await sountTTS.speak(text);
   }
 }
