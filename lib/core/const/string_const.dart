@@ -13,9 +13,11 @@ final class StringConst {
   static const String writingPractice = 'Yazma Alıştırması';
   static const String mixedPractice = 'Karışık Alıştırma';
 
- //quizPageException
+  //quizPageException
 
-  static const String noteWordException = 'Sorular yüklenirker bir sorun oluştu';
-  
+  static const String noteWordException =
+      'Sorular yüklenirker bir sorun oluştu';
 
+  /// path to json
+  static const String dbData = 'assets/json/db.json';
 }

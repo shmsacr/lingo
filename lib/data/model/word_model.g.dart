@@ -59,6 +59,7 @@ class WordsAdapter extends TypeAdapter<Words> {
 // JsonSerializableGenerator
 // **************************************************************************
 
+
 _$_Words _$$_WordsFromJson(Map<String, dynamic> json) => _$_Words(
       id: json['id'] as String,
       word: json['word'] as String,

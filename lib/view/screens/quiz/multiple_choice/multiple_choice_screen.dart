@@ -53,18 +53,17 @@ class _MultipleChoiceScreenState extends ConsumerState<MultipleChoiceScreen> {
                     CustomTextWidget(
                       text:
                           'Soru:   ${(_quizWordProvider.questionCount ?? 1)} / ${_quizproviderNotifier.allWordList.length}',
-                      color: Colors.white,
                     ),
                     Card(
                       elevation: 20,
-                      color: AppColors.appGeneralLigthGrey,
+                      color: AppColors.appBlue,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           _QuestionWordTitle(
                               quizWordProvider: _quizWordProvider),
                           Divider(
-                            color: AppColors.appGeneralDarkGrey,
+                            color: AppColors.appBlue,
                             height: 10,
                             thickness: 3,
                             indent: 30,
@@ -151,7 +150,7 @@ class _MultipleChoiceScreenState extends ConsumerState<MultipleChoiceScreen> {
             child: CustomTextWidget(
               text: option,
               color: selectedAnswer == ""
-                  ? AppColors.appGeneralDarkGrey
+                  ? AppColors.appBlue
                   : option == _currentQuestion?['means']
                       ? Colors.green
                       : Colors.grey,
@@ -184,17 +183,22 @@ final class _CheckQuizEndAlertDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: AlertDialog(
-        elevation: 2,
-        title: Text('Quiz Sonuçları'),
+        backgroundColor: AppColors.appBlue,
+        elevation: 10,
+        title: CustomTextWidget(
+          text: 'Sonuçlar',
+          color: Colors.white,
+          fontsize: context.general.textTheme.headlineMedium?.fontSize,
+        ),
         content: ListTile(
             title: CustomTextWidget(
-              text: 'Doğru Cevap:   ${_quizNotifier.correctAnswerCount} ',
-              color: Colors.black,
+              text: 'Doğru :  ${_quizNotifier.correctAnswerCount} ',
+              color: Colors.white,
             ),
             subtitle: CustomTextWidget(
               text:
-                  'Yanlış Cevap:   ${(_quizNotifier.questionCount - 1) - _quizNotifier.correctAnswerCount}',
-              color: Colors.black,
+                  'Yanlış :   ${(_quizNotifier.questionCount - 1) - _quizNotifier.correctAnswerCount}',
+              color: Colors.white,
             )),
         actions: [
           TextButton(
@@ -202,7 +206,10 @@ final class _CheckQuizEndAlertDialog extends StatelessWidget {
               _quizNotifier.resetQuiz();
               Navigator.pop(context);
             },
-            child: Text('Quiz Sayfasına Dön'),
+            child: CustomTextWidget(
+              text: 'Tekrar Dene',
+              color: Colors.white,
+            ),
           ),
         ],
       ),
@@ -241,14 +248,16 @@ final class _QuestionWordTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(15),
       ),
       width: context.general.mediaQuery.size.width * 0.8,
       height: 70,
-      child: Center(
+      child: Align(
+        alignment: Alignment.center,
+        widthFactor: 2,
+        heightFactor: 2,
         child: CustomTextWidget(
-          text:
-              '  ${_quizWordProvider.currentQuestion?['word']?.toUpperCase()}  ',
+          text: '${_quizWordProvider.currentQuestion?['word']?.toUpperCase()}',
           fontsize: context.general.textTheme.titleLarge?.fontSize,
           color: Colors.white,
         ),

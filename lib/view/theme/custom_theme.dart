@@ -31,10 +31,11 @@ class CustomAppTheme {
 
         ///cardTheme
         cardTheme: CardTheme(
-          elevation: 3,
+          elevation: 5,
           color: Colors.white,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8), side: BorderSide.none),
+            borderRadius: BorderRadius.circular(8),
+          ),
         ),
 
         ///iconTheme
