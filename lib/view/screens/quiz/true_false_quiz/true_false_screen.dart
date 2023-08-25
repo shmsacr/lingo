@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kartal/kartal.dart';
 import 'package:lingo/controller/riverpod/time_controller.dart';
+import 'package:lingo/data/model/true_false_model.dart';
 import 'package:lingo/view/widget/custom_text_widget.dart';
 
+import '../../../../controller/riverpod/timer_controller.dart';
 import '../../../../controller/riverpod/true_false_controller.dart';
 
 class TrueFalseScreen extends ConsumerStatefulWidget {
@@ -19,23 +21,31 @@ class _TrueFalseScreenState extends ConsumerState<TrueFalseScreen> {
   @override
   void initState() {
     super.initState();
-    ref.read(timerProvider.notifier).startTimer();
+  }
+
+  String _formatDuration(Duration duration) {
+    return '${duration.inMinutes} : ${(duration.inSeconds % 60).toString().padLeft(2, '0')}s ${(duration.inMilliseconds % 1000 ~/ 10).toString().padLeft(2, '0')}';
   }
 
   List<Icon> scoreKeeper = [];
 
   bool isLoading = true;
+  List<TrueFalse> answerList = [];
 
-  Future<void> checkAnwer(bool userChoice, bool result) async {
+  Future<void> checkAnwer(bool userChoice, TrueFalse data) async {
     isLoading = false;
-    if (userChoice == result) {
+    if (userChoice == data.result) {
       ref.refresh(cardColorProvider.notifier).state = Colors.green;
       ref.refresh(textColorProvider.notifier).state = Colors.white;
       ref.read(scoreProvider.notifier).state++;
+      data.result = true;
+      answerList.add(data);
       print("Dogru yapıldı");
     } else {
       ref.refresh(cardColorProvider.notifier).state = Colors.red;
       ref.refresh(textColorProvider.notifier).state = Colors.white;
+      data.result = false;
+      answerList.add(data);
       print("yanlıs cevap");
     }
 
@@ -54,28 +64,53 @@ class _TrueFalseScreenState extends ConsumerState<TrueFalseScreen> {
     final textColor = ref.watch(textColorProvider.notifier);
     final score = ref.watch(scoreProvider.notifier);
     final timerValue = ref.watch(timerProvider);
-    final initialDuration = Duration(minutes: 1).inSeconds;
+    final stopwatchValue = ref.watch(stopwatchProvider);
+    final formattedValue = _formatDuration(stopwatchValue);
+    final startStop = ref.watch(startStopProivder);
 
-    double progressValue = (initialDuration - timerValue) / initialDuration;
     return WillPopScope(
       onWillPop: () async {
-        ref.read(timerProvider.notifier).timerReset();
+        ref.read(stopwatchProvider.notifier).reset();
         ref.invalidate(trueFalseProvider);
         ref.invalidate(scoreProvider);
+        ref.invalidate(startStopProivder);
+        ref.invalidate(answerListProvider);
         return true;
       },
       child: Scaffold(
           appBar: AppBar(
-            title: Text(timerValue.toString()),
-            actions: [],
+            title: Text(
+              formattedValue,
+              style: TextStyle(fontSize: 40),
+            ),
+            actions: [
+              IconButton(
+                  onPressed: () async {
+                    ref.watch(startStopProivder.notifier).state = !startStop;
+                    if (ref.watch(startStopProivder)) {
+                      ref.read(stopwatchProvider.notifier).start();
+                    } else
+                      ref.read(stopwatchProvider.notifier).stop();
+                  },
+                  icon: Icon(ref.watch(startStopProivder)
+                      ? Icons.pause
+                      : Icons.not_started_outlined))
+            ],
           ),
-          body: timerValue == 0
-              ? Center(
-                  child: CustomTextWidget(
-                    text: "Score: ${score.state}",
-                    color: Colors.white,
-                  ),
-                )
+          body: ref.watch(answerListProvider)
+              ? ListView.builder(
+                  itemCount: answerList.length,
+                  itemBuilder: (context, index) {
+                    TrueFalse data = answerList[index];
+                    return ListTile(
+                      title: CustomTextWidget(
+                        text: data.word + " = " + data.means[0],
+                        fontsize:
+                            context.general.textTheme.headlineMedium?.fontSize,
+                        color: textColor.state,
+                      ),
+                    );
+                  })
               : trueFalseWord.when(
                   data: (data) => SafeArea(
                         child: Padding(
@@ -103,8 +138,9 @@ class _TrueFalseScreenState extends ConsumerState<TrueFalseScreen> {
                                         ),
                                         Center(
                                           child: CustomTextWidget(
-                                            text:
-                                                data.word + " = " + data.means,
+                                            text: data.word +
+                                                " = " +
+                                                data.means[0],
                                             fontsize: context.general.textTheme
                                                 .headlineMedium?.fontSize,
                                             color: textColor.state,
@@ -115,18 +151,14 @@ class _TrueFalseScreenState extends ConsumerState<TrueFalseScreen> {
                                   ),
                                 ),
                               ),
-                              LinearProgressIndicator(
-                                value: progressValue,
-                                color: Colors.amber,
-                              ),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: [
                                   IconButton(
                                     onPressed: () {
-                                      isLoading
-                                          ? checkAnwer(false, data.result)
+                                      isLoading && startStop
+                                          ? checkAnwer(false, data)
                                           : null;
                                     },
                                     icon: Icon(
@@ -141,8 +173,8 @@ class _TrueFalseScreenState extends ConsumerState<TrueFalseScreen> {
                                   ),
                                   IconButton(
                                     onPressed: () {
-                                      isLoading
-                                          ? checkAnwer(true, data.result)
+                                      isLoading && startStop
+                                          ? checkAnwer(true, data)
                                           : null;
                                     },
                                     icon: Icon(
@@ -152,6 +184,20 @@ class _TrueFalseScreenState extends ConsumerState<TrueFalseScreen> {
                                     ),
                                   ),
                                 ],
+                              ),
+                              Padding(
+                                padding: context.padding.high,
+                                child: ElevatedButton(
+                                    onPressed: () {
+                                      ref
+                                          .read(stopwatchProvider.notifier)
+                                          .stop();
+                                      ref
+                                          .watch(startStopProivder.notifier)
+                                          .state = !startStop;
+                                      _showAlertDialog(!startStop);
+                                    },
+                                    child: Text("Finish Quiz")),
                               )
                             ],
                           ),
@@ -159,6 +205,48 @@ class _TrueFalseScreenState extends ConsumerState<TrueFalseScreen> {
                       ),
                   error: (error, _) => Text(error.toString()),
                   loading: () => CircularProgressIndicator())),
+    );
+  }
+
+  Future<void> _showAlertDialog(bool startStop) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Cancel booking'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('Are you sure want to cancel booking?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                ref.read(stopwatchProvider.notifier).start();
+                ref.watch(startStopProivder.notifier).state = !startStop;
+              },
+            ),
+            TextButton(
+              child: const Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Yes'),
+              onPressed: () {
+                ref.read(answerListProvider.notifier).state = true;
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
