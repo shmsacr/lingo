@@ -1,4 +1,3 @@
-
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // import 'package:lingo/data/model/word_model.dart';
@@ -8,14 +7,13 @@
 //   (ref) => WordListNotifier(),
 // );
 
-
-
-//  class WordListNotifier extends StateNotifier<WordListState> {
-//   WordListNotifier() : super(WordListState(words: []));
+// class WordListNotifier extends StateNotifier<WordListState> {
+//   WordListNotifier() : super(WordListState(words: [], searchList: []));
 
 //   List<Words>? _allWords = [];
 //   bool isLoading = false;
 //   List<Words>? get allWords => _allWords;
+//   List<Words> searchList = [];
 
 //   final localStorage = HiveLocalStroge();
 
@@ -49,24 +47,38 @@
 //     _allWords?.remove(word);
 //     state = state.copyWith(words: _allWords);
 //   }
+
+//   void searchWords(String value) {
+//     searchList.clear();
+//     if (value.isNotEmpty) {
+//       searchList.addAll(state.words!
+//           .where((element) => element.id.toLowerCase().contains(value)));
+//       print('searchListasdsad ${searchList.length}');
+//     }
+//     state = state.copyWith(searchList: searchList);
+//   }
 // }
 
 // class WordListState {
 //   final List<Words>? words;
 //   final bool? isLoading;
+//   final List<Words> searchList;
 
 //   WordListState({
 //     this.words,
 //     this.isLoading,
+//     required this.searchList,
 //   });
 
 //   WordListState copyWith({
 //     List<Words>? words,
 //     bool? isLoading,
+//     List<Words>? searchList,
 //   }) {
 //     return WordListState(
 //       words: words ?? this.words,
 //       isLoading: isLoading,
+//       searchList: searchList ?? this.searchList,
 //     );
 //   }
 // }

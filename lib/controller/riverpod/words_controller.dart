@@ -13,10 +13,11 @@ class WordListNotifier extends StateNotifier<List<Words>> {
     getAllWords();
   }
 
+  List<Words> filteredWords = [];
+
   Future<List<Words>> getAllWords() async {
     final localStorage = HiveLocalStroge();
     final words = await localStorage.getAllWords();
-
     state = words;
     return state;
   }
@@ -35,18 +36,13 @@ class WordListNotifier extends StateNotifier<List<Words>> {
     }
   }
 
-  // void searchWords(String value) async {
-  //   searchList.clear();
-  //   if (value.isNotEmpty) {
-  //     state = state
-  //         .where((element) =>
-  //             element.word.toLowerCase().contains(value.toLowerCase()) ||
-  //             element.means.toLowerCase().contains(value.toLowerCase()))
-  //         .toList();
-  //   } else {
-  //     state = await getAllWords();
-  //   }
-  // }
+  void filterWords(String query) {
+    filteredWords = state
+        .where((word) =>
+            word.word.toLowerCase().contains(query.toLowerCase()) ||
+            word.means.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+  }
 
   void speak(String text) async {
     final sountTTS = FlutterTts();

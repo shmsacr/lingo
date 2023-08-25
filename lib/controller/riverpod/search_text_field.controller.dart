@@ -7,11 +7,8 @@ final searchTextFieldProvider =
 
 class SearchTextFieldControllerNotifier extends StateNotifier<bool> {
   SearchTextFieldControllerNotifier() : super(false);
-  
+
   void changeSearch() {
     state = !state;
   }
 }
-
-
-
