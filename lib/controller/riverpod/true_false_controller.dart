@@ -20,7 +20,7 @@ final trueFalseProvider = FutureProvider<TrueFalse>((ref) async {
   if (randomIndex1 == 1) {
     TrueFalse trueFalse = await TrueFalse(
         word: allWord[randomIndex].word,
-        means: allWord[randomIndex].means,
+        means: [allWord[randomIndex].means],
         result: true);
     print(trueFalse.means);
     return trueFalse;
@@ -32,7 +32,7 @@ final trueFalseProvider = FutureProvider<TrueFalse>((ref) async {
 
     TrueFalse trueFalse = await TrueFalse(
         word: allWord[randomIndex].word,
-        means: allWord[randomIndex3].means,
+        means: [allWord[randomIndex3].means, allWord[randomIndex].means],
         result: false);
     print(trueFalse.means);
     return trueFalse;
@@ -46,3 +46,5 @@ final cardColorProvider = StateProvider<Color>((ref) {
 final textColorProvider = StateProvider((ref) => AppColors.appGeneralDarkGrey);
 
 final scoreProvider = StateProvider<int>((ref) => 0);
+final startStopProivder = StateProvider<bool>((ref) => false);
+final answerListProvider = StateProvider<bool>((ref) => false);
