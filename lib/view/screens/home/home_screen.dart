@@ -5,11 +5,11 @@ import 'package:kartal/kartal.dart';
 import 'package:lingo/controller/riverpod/search_delegate.dart';
 import 'package:lingo/controller/riverpod/search_text_field.controller.dart';
 import 'package:lingo/controller/riverpod/speaker_controller.dart';
-
-import 'package:lingo/controller/riverpod/words_controller.dart';
 import 'package:lingo/view/screens/home/add_word_screen/add_word_screen.dart';
 import 'package:lingo/view/theme/app_colors.dart';
 
+import '../../../controller/riverpod/db_controller.dart';
+import '../../../controller/theme_controller.dart';
 import '../../../data/model/word_model.dart';
 import '../../widget/custom_text_widget.dart';
 
@@ -24,13 +24,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   final TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    final wordList = ref.watch(wordListNotifierProvider);
+    final wordList = ref.watch(wordsProvider);
 
+    bool isDarkTheme = ref.watch(themeProvider);
     return Scaffold(
       body: Stack(
         children: [
           Positioned(
-            child: Container(color: AppColors.appBlue),
+            child: Container(
+                color: isDarkTheme ? Color(0xff072027) : AppColors.appBlue),
           ),
           Positioned(
             top: 15,
@@ -44,50 +46,61 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               onPressed: () {
                 showSearch(
                   context: context,
-                  delegate: SearchWords(ref: ref,wordsList: wordList),
+                  delegate: SearchWords(ref: ref),
                 );
               },
             ),
           ),
           _AddWordIconButton(),
           _TextLingoTitle(),
-          if (wordList.isNotEmpty)
-            Positioned(
-              top: 80,
-              left: 0,
-              right: 0,
-              child: Card(
-                margin: EdgeInsets.zero,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                  ),
+          Positioned(
+            top: 80,
+            left: 0,
+            right: 0,
+            child: Card(
+              margin: EdgeInsets.zero,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
                 ),
-                child: Container(
-                  height: MediaQuery.of(context).size.height,
-                  child: Padding(
-                    padding: context.padding.low,
-                    child: ListView.builder(
-                      itemCount: wordList.length,
-                      itemBuilder: (context, index) {
-                        final isdata = wordList[index];
-                        return buildPadding(context, ref, isdata);
-                      },
+              ),
+              child: Container(
+                height: MediaQuery.of(context).size.height,
+                child: Padding(
+                  padding: context.padding.low,
+                  child: wordList.when(
+                    data: (isData) {
+                      if (isData.isNotEmpty) {
+                        return ListView.builder(
+                          itemCount: isData.length,
+                          itemBuilder: (context, index) {
+                            final isdata = isData[index];
+                            return buildPadding(context, ref, isdata);
+                          },
+                        );
+                      } else {
+                        return Center(
+                          child: CustomTextWidget(
+                            text: 'No result found',
+                            fontsize: 24,
+                            color: Colors.pink,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        );
+                      }
+                    },
+                    error: (error, stackTrace) => Text('Hata: $error'),
+                    loading: () => SizedBox(
+                      child: Center(child: CircularProgressIndicator()),
+                      height: 70,
+                      width: 70,
                     ),
                   ),
                 ),
               ),
-            )
-          else
-            Center(
-              child: CustomTextWidget(
-                text: 'No result found',
-                fontsize: 24,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
             ),
+          )
         ],
       ),
     );
@@ -100,7 +113,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         children: [
           SlidableAction(
             onPressed: (_) {
-              ref.read(wordListNotifierProvider.notifier).deleteWord(isdata);
+              ref.watch(deleteWordProvider(isdata));
             },
             backgroundColor: Colors.red,
             icon: Icons.delete,
@@ -129,7 +142,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           onTap: () => _showBottomSheet(isdata),
           trailing: IconButton(
             onPressed: () async {
-                   speak(isdata.word);
+              speak(isdata.word);
             },
             icon: Icon(
               Icons.volume_up_rounded,
@@ -197,7 +210,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                     trailing: IconButton(
                       onPressed: () {
-                       speak(words.word);
+                        speak(words.word);
                       },
                       icon: Icon(
                         Icons.volume_up_rounded,
@@ -217,7 +230,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                     trailing: IconButton(
                       onPressed: () {
-                          speak(words.word);
+                        speak(words.word);
                       },
                       icon: Icon(
                         Icons.volume_up_rounded,
@@ -258,7 +271,7 @@ class _BuildTextFieldState extends ConsumerState<BuildTextField> {
                 ref.watch(searchTextFieldProvider.notifier).changeSearch();
               },
               onChanged: (value) {
-             //   ref.watch(wordListNotifierProvider.notifier).filterWords(value);
+                //   ref.watch(wordListNotifierProvider.notifier).filterWords(value);
               },
               style: TextStyle(color: AppColors.appBlue),
               decoration: _textFieldDecoration(context),
