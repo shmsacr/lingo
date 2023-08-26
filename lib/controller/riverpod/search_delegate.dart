@@ -1,31 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:kartal/kartal.dart';
 import 'package:lingo/controller/riverpod/speaker_controller.dart';
 import 'package:lingo/data/model/word_model.dart';
 import 'package:lingo/view/theme/app_colors.dart';
 import 'package:lingo/view/widget/custom_text_widget.dart';
 
-class SearchWords extends SearchDelegate<Words> {
-  final List<Words> wordsList;
-  List<Words> results = [];
-  final WidgetRef ref;
-  Words? isdata;
-  SearchWords({required this.wordsList, required this.ref, this.isdata});
+import '../../view/screens/home/add_word_screen/add_word_screen.dart';
+import 'db_controller.dart';
 
-  void deleteWord(String wordToDelete) {
-    wordsList.removeWhere(
-        (word) => word.means.toLowerCase() == wordToDelete.toLowerCase());
-  }
+class SearchWords extends SearchDelegate<Words> {
+  final WidgetRef ref;
+  SearchWords({required this.ref});
 
   @override
   List<Widget> buildActions(BuildContext context) {
+    ref.invalidate(wordsProvider);
     return [
       IconButton(
         icon: Icon(Icons.clear),
         onPressed: () {
           query = '';
-          showSuggestions(context);
         },
       ),
     ];
@@ -33,6 +29,7 @@ class SearchWords extends SearchDelegate<Words> {
 
   @override
   Widget buildLeading(BuildContext context) {
+    ref.invalidate(wordsProvider);
     return IconButton(
       icon: AnimatedIcon(
         icon: AnimatedIcons.menu_arrow,
@@ -46,34 +43,72 @@ class SearchWords extends SearchDelegate<Words> {
 
   @override
   Widget buildResults(BuildContext context) {
+    final words = ref.watch(wordsProvider);
+    List<Words> matchQuery = [];
+
+    for (var fruit in words.asData!.value) {
+      if (fruit.word.toLowerCase().contains(query.toLowerCase())) {
+        matchQuery.add(fruit);
+      }
+    }
     return ListView.builder(
-      itemCount: results.length,
+      itemCount: matchQuery.length,
       itemBuilder: (context, index) {
-        isdata = results[index];
-        return Card(
-          elevation: 10,
-          child: ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 40),
-            titleAlignment: ListTileTitleAlignment.center,
-            // onTap: () => _showBottomSheet(isdata),
-            trailing: IconButton(
-              onPressed: () async {
-                speak(isdata!.word);
-              },
-              icon: Icon(
-                Icons.volume_up_rounded,
-                color: AppColors.appBlue,
+        final isdata = matchQuery[index];
+        return Slidable(
+          endActionPane: ActionPane(
+            motion: ScrollMotion(),
+            children: [
+              SlidableAction(
+                onPressed: (_) {
+                  ref.watch(deleteWordProvider(isdata));
+                  ref.invalidate(wordsProvider);
+                  matchQuery.remove(isdata);
+                },
+                backgroundColor: Colors.red,
+                icon: Icons.delete,
               ),
-            ),
-            title: CustomTextWidget(
-              text: isdata!.word,
-              fontsize: context.general.textTheme.titleMedium?.fontSize,
-              fontWeight: FontWeight.w900,
-            ),
-            subtitle: CustomTextWidget(
-              text: isdata!.means,
-              fontWeight: FontWeight.w500,
-              fontsize: context.general.textTheme.titleMedium?.fontSize,
+              SlidableAction(
+                onPressed: (context) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute<AddWord>(
+                      builder: (context) => AddWord(
+                        myWords: isdata,
+                      ),
+                    ),
+                  );
+                },
+                backgroundColor: Colors.orange,
+                icon: Icons.edit,
+              ),
+            ],
+          ),
+          child: Card(
+            elevation: 10,
+            child: ListTile(
+              contentPadding: EdgeInsets.symmetric(horizontal: 40),
+              titleAlignment: ListTileTitleAlignment.center,
+              // onTap: () => _showBottomSheet(isdata),
+              trailing: IconButton(
+                onPressed: () async {
+                  speak(isdata.word);
+                },
+                icon: Icon(
+                  Icons.volume_up_rounded,
+                  color: AppColors.appBlue,
+                ),
+              ),
+              title: CustomTextWidget(
+                text: isdata.word,
+                fontsize: context.general.textTheme.titleMedium?.fontSize,
+                fontWeight: FontWeight.w900,
+              ),
+              subtitle: CustomTextWidget(
+                text: isdata.means,
+                fontWeight: FontWeight.w500,
+                fontsize: context.general.textTheme.titleMedium?.fontSize,
+              ),
             ),
           ),
         );
@@ -83,46 +118,74 @@ class SearchWords extends SearchDelegate<Words> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final suggestions = query.isEmpty
-        ? wordsList
-        : wordsList
-            .where((word) =>
-                word.word.toLowerCase().contains(query.toLowerCase()) ||
-                word.means.toLowerCase().contains(query.toLowerCase()))
-            .toList();
-    if (suggestions.isEmpty) {
-      return Center(child: Text('Kelime bulunamadı'));
-    }
-    results = suggestions;
+    final words = ref.watch(wordsProvider);
 
+    List<Words> matchQuery = [];
+
+    for (var fruit in words.asData!.value) {
+      if (fruit.word.toLowerCase().contains(query.toLowerCase()) ||
+          fruit.means.toLowerCase().contains(query.toLowerCase())) {
+        matchQuery.add(fruit);
+      }
+    }
     return ListView.builder(
-      itemCount: results.length,
+      itemCount: matchQuery.length,
       itemBuilder: (context, index) {
-        isdata = results[index];
-        return Card(
-          elevation: 10,
-          child: ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 40),
-            titleAlignment: ListTileTitleAlignment.center,
-            // onTap: () => _showBottomSheet(isdata),
-            trailing: IconButton(
-              onPressed: () async {
-                speak(isdata!.word);
-              },
-              icon: Icon(
-                Icons.volume_up_rounded,
-                color: AppColors.appBlue,
+        final isdata = matchQuery[index];
+        return Slidable(
+          endActionPane: ActionPane(
+            motion: ScrollMotion(),
+            children: [
+              SlidableAction(
+                onPressed: (_) {
+                  ref.watch(deleteWordProvider(isdata));
+                  ref.invalidate(wordsProvider);
+                  matchQuery.remove(isdata);
+                },
+                backgroundColor: Colors.red,
+                icon: Icons.delete,
               ),
-            ),
-            title: CustomTextWidget(
-              text: isdata!.word,
-              fontsize: context.general.textTheme.titleMedium?.fontSize,
-              fontWeight: FontWeight.w900,
-            ),
-            subtitle: CustomTextWidget(
-              text: isdata!.means,
-              fontWeight: FontWeight.w500,
-              fontsize: context.general.textTheme.titleMedium?.fontSize,
+              SlidableAction(
+                onPressed: (context) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute<AddWord>(
+                      builder: (context) => AddWord(
+                        myWords: isdata,
+                      ),
+                    ),
+                  );
+                },
+                backgroundColor: Colors.orange,
+                icon: Icons.edit,
+              ),
+            ],
+          ),
+          child: Card(
+            elevation: 10,
+            child: ListTile(
+              contentPadding: EdgeInsets.symmetric(horizontal: 40),
+              titleAlignment: ListTileTitleAlignment.center,
+              // onTap: () => _showBottomSheet(isdata),
+              trailing: IconButton(
+                onPressed: () async {
+                  speak(isdata.word);
+                },
+                icon: Icon(
+                  Icons.volume_up_rounded,
+                  color: AppColors.appBlue,
+                ),
+              ),
+              title: CustomTextWidget(
+                text: isdata.word,
+                fontsize: context.general.textTheme.titleMedium?.fontSize,
+                fontWeight: FontWeight.w900,
+              ),
+              subtitle: CustomTextWidget(
+                text: isdata.means,
+                fontWeight: FontWeight.w500,
+                fontsize: context.general.textTheme.titleMedium?.fontSize,
+              ),
             ),
           ),
         );
