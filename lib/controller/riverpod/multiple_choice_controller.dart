@@ -3,15 +3,14 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kartal/kartal.dart';
-
-import 'package:lingo/controller/riverpod/words_controller.dart';
+import 'package:lingo/controller/riverpod/db_controller.dart';
 import 'package:lingo/data/model/word_model.dart';
 
 final quizProvider =
     StateNotifierProvider.autoDispose<QuizNotifier, QuizState>((ref) {
-  final readWords = ref.read(wordListNotifierProvider);
+  final readWords = ref.read(wordsProvider);
 
-  return QuizNotifier(allWordList: readWords);
+  return QuizNotifier(allWordList: readWords.value!);
 });
 
 class QuizNotifier extends StateNotifier<QuizState> {
