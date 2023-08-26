@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:lingo/controller/riverpod/words_controller.dart';
+import 'package:lingo/controller/riverpod/db_controller.dart';
 import 'package:lingo/view/screens/suggested/suggested_screen.dart';
 import 'package:lingo/view/theme/app_colors.dart';
 import 'package:lingo/view/widget/custom_text_widget.dart';
@@ -34,11 +34,9 @@ class _AddWordState extends ConsumerState<AddWord> {
 
   @override
   Widget build(BuildContext context) {
-    final wordCt = ref.read(wordListNotifierProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         title: Text("Kelime Ekle"),
-        backgroundColor: AppColors.appBlue,
         actions: [
           TextButton(
               onPressed: () {
@@ -153,7 +151,7 @@ class _AddWordState extends ConsumerState<AddWord> {
                         });
 
                         try {
-                          wordCt.addWord(words);
+                          ref.read(addWordProvider(words));
                           if (context.mounted) {
                             ScaffoldMessenger.of(context).clearSnackBars();
                             ScaffoldMessenger.of(context).showSnackBar(
