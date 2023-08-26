@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lingo/controller/riverpod/words_controller.dart';
+import 'package:lingo/controller/riverpod/db_controller.dart';
 import 'package:lingo/core/const/string_const.dart';
 import 'package:lingo/core/enums/image_enums.dart';
 import 'package:lingo/data/model/word_model.dart';
@@ -22,7 +22,7 @@ mixin QuizScreenMixin {
 }
 
 void pushToSelectScreenQuiz(BuildContext context, int index, WidgetRef ref) {
-  final List<Words>? _allWord = ref.read(wordListNotifierProvider);
+  final List<Words>? _allWord = ref.read(wordsProvider).value;
 
   switch (index) {
     case 0:
