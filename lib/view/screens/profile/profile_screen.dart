@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:day_night_switch/day_night_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,6 +7,8 @@ import 'package:lingo/view/widget/custom_text_widget.dart';
 
 import '../../../controller/theme_controller.dart';
 
+
+@RoutePage()
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({
     Key? key,

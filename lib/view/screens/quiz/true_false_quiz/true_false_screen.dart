@@ -63,7 +63,7 @@ class _TrueFalseScreenState extends ConsumerState<TrueFalseScreen> {
     final cardColor = ref.watch(cardColorProvider.notifier);
     final textColor = ref.watch(textColorProvider.notifier);
     final score = ref.watch(scoreProvider.notifier);
-    final timerValue = ref.watch(timerProvider);
+   // final timerValue = ref.watch(timerProvider);
     final stopwatchValue = ref.watch(stopwatchProvider);
     final formattedValue = _formatDuration(stopwatchValue);
     final startStop = ref.watch(startStopProivder);

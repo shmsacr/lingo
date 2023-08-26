@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:flutter/foundation.dart';
+
 part 'suggested_word.freezed.dart';
+
 part 'suggested_word.g.dart';
 
 @freezed

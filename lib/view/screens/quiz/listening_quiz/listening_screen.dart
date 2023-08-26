@@ -57,12 +57,12 @@ class _ListeningScreenState extends ConsumerState<ListeningScreen> {
         body: randomWord.when(
             data: (data) => Center(
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: EdgeInsets.all(16.0),
                     child: SizedBox(
                       height: 400,
                       child: Card(
                         child: Padding(
-                          padding: const EdgeInsets.all(15.0),
+                          padding: EdgeInsets.all(15.0),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -130,6 +130,8 @@ class _ListeningScreenState extends ConsumerState<ListeningScreen> {
                                   color: AppColors.appGeneralDarkGrey,
                                 ),
                               ),
+                              ElevatedButton(
+                                  onPressed: () {}, child: Text('Submit')),
                             ],
                           ),
                         ),

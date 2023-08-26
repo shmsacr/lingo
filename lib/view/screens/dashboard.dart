@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lingo/controller/riverpod/dashboard_controller.dart';
@@ -6,6 +7,8 @@ import 'package:lingo/view/screens/quiz/Quiz_Screen.dart';
 import 'home/home_screen.dart';
 import 'profile/profile_screen.dart';
 
+
+@RoutePage()
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({
     Key? key,

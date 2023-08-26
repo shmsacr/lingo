@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -13,6 +14,7 @@ import 'package:lingo/view/theme/app_colors.dart';
 import '../../../data/model/word_model.dart';
 import '../../widget/custom_text_widget.dart';
 
+@RoutePage()
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
@@ -44,50 +46,61 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               onPressed: () {
                 showSearch(
                   context: context,
-                  delegate: SearchWords(ref: ref,wordsList: wordList),
+                  delegate: SearchWords(ref: ref, wordsList: wordList),
                 );
               },
             ),
           ),
           _AddWordIconButton(),
           _TextLingoTitle(),
-          if (wordList.isNotEmpty)
-            Positioned(
-              top: 80,
-              left: 0,
-              right: 0,
-              child: Card(
-                margin: EdgeInsets.zero,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                  ),
-                ),
-                child: Container(
-                  height: MediaQuery.of(context).size.height,
-                  child: Padding(
-                    padding: context.padding.low,
-                    child: ListView.builder(
-                      itemCount: wordList.length,
-                      itemBuilder: (context, index) {
-                        final isdata = wordList[index];
-                        return buildPadding(context, ref, isdata);
-                      },
-                    ),
-                  ),
+          Positioned(
+            top: 80,
+            left: 0,
+            right: 0,
+            child: Card(
+              margin: EdgeInsets.zero,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
                 ),
               ),
-            )
-          else
-            Center(
-              child: CustomTextWidget(
-                text: 'No result found',
-                fontsize: 24,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+              child: Container(
+                height: MediaQuery.of(context).size.height,
+                child: Padding(
+                  padding: context.padding.low,
+                  child: wordList.isEmpty
+                      ? Center(
+                          child: CustomTextWidget(
+                            text: "No words added yet",
+                            fontsize: context
+                                .general.textTheme.headlineMedium?.fontSize,
+                          ),
+                        )
+                      : FutureBuilder<bool?>(
+                          future: ref
+                              .watch(wordListNotifierProvider.notifier)
+                              .isData(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState !=
+                                ConnectionState.done) {
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            } else
+                              return ListView.builder(
+                                itemCount: wordList.length,
+                                itemBuilder: (context, index) {
+                                  final isdata = wordList[index];
+                                  return buildPadding(context, ref, isdata);
+                                },
+                              );
+                          },
+                        ),
+                ),
               ),
             ),
+          ),
         ],
       ),
     );
@@ -129,7 +142,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           onTap: () => _showBottomSheet(isdata),
           trailing: IconButton(
             onPressed: () async {
-                   speak(isdata.word);
+              speak(isdata.word);
             },
             icon: Icon(
               Icons.volume_up_rounded,
@@ -197,7 +210,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                     trailing: IconButton(
                       onPressed: () {
-                       speak(words.word);
+                        speak(words.word);
                       },
                       icon: Icon(
                         Icons.volume_up_rounded,
@@ -217,7 +230,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                     trailing: IconButton(
                       onPressed: () {
-                          speak(words.word);
+                        speak(words.word);
                       },
                       icon: Icon(
                         Icons.volume_up_rounded,
@@ -258,7 +271,7 @@ class _BuildTextFieldState extends ConsumerState<BuildTextField> {
                 ref.watch(searchTextFieldProvider.notifier).changeSearch();
               },
               onChanged: (value) {
-             //   ref.watch(wordListNotifierProvider.notifier).filterWords(value);
+                //   ref.watch(wordListNotifierProvider.notifier).filterWords(value);
               },
               style: TextStyle(color: AppColors.appBlue),
               decoration: _textFieldDecoration(context),

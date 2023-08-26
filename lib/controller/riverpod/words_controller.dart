@@ -12,13 +12,22 @@ class WordListNotifier extends StateNotifier<List<Words>> {
     getAllWords();
   }
 
-  List<Words> filteredWords = [];
-
   Future<List<Words>> getAllWords() async {
     final localStorage = HiveLocalStroge();
     final words = await localStorage.getAllWords();
     state = words;
     return state;
+  }
+
+  Future<bool?> isData() async {
+    final words = state;
+    if (words.isEmpty) {
+      return false;
+    } else if (words.isNotEmpty) {
+      return true;
+    } else {
+      return null;
+    }
   }
 
   Future<void> addWord(Words word) async {
