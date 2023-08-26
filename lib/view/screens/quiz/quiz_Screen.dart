@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kartal/kartal.dart';
-import 'package:lingo/controller/riverpod/words_controller.dart';
+import 'package:lingo/controller/riverpod/db_controller.dart';
 import 'package:lingo/core/const/string_const.dart';
 import 'package:lingo/view/screens/quiz/mixin/QuizScreenMixin.dart';
 import 'package:lingo/view/theme/app_colors.dart';
@@ -140,18 +140,6 @@ final class _QuizAppTitle extends StatelessWidget {
   }
 }
 
-// @immutable
-// final class _ListTileRow extends StatelessWidget {
-//   const _ListTileRow({
-//     required this.title,
-//   });
-//   final String title;
-//   @override
-//   Widget build(BuildContext context) {
-//     return _CustomQuizListTile(title: title, subtitle: 'Toplam Kelime');
-//   }
-// }
-
 @immutable
 final class _CustomQuizListTile extends StatelessWidget {
   const _CustomQuizListTile();
@@ -169,7 +157,7 @@ final class _CustomQuizListTile extends StatelessWidget {
               heightFactor: 1.5,
               alignment: Alignment.center,
               child: CustomTextWidget(
-                text: ref.read(wordListNotifierProvider).length.toString(),
+                text: ref.read(wordsProvider).value!.length.toString(),
                 fontsize: context.general.textTheme.titleMedium?.fontSize,
                 color: Colors.white,
               ),
