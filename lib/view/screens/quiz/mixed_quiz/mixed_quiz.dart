@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lingo/controller/riverpod/db_controller.dart';
 import 'package:lingo/controller/riverpod/mixed_quiz_controller.dart';
-import 'package:lingo/controller/riverpod/words_controller.dart';
 
 class MixedQuiz extends ConsumerStatefulWidget {
   const MixedQuiz({super.key});
@@ -26,7 +26,7 @@ class _MixedQuizState extends ConsumerState<MixedQuiz> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
-            if (_currentIndex < ref.read(wordListNotifierProvider).length) {
+            if (_currentIndex < ref.read(wordsProvider).value!.length) {
               _currentIndex++;
             }
           });
