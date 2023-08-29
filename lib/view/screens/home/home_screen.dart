@@ -27,81 +27,148 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final wordList = ref.watch(wordsProvider);
 
     bool isDarkTheme = ref.watch(themeProvider);
-    return Scaffold(
-      body: Stack(
-        children: [
-          Positioned(
-            child: Container(
-                color: isDarkTheme ? Color(0xff072027) : AppColors.appBlue),
-          ),
-          Positioned(
-            top: 15,
-            left: context.general.mediaQuery.size.width * 0.8,
-            right: 0,
-            child: IconButton(
-              icon: Icon(
-                Icons.search,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                showSearch(
-                  context: context,
-                  delegate: SearchWords(ref: ref),
-                );
-              },
-            ),
-          ),
-          _AddWordIconButton(),
-          _TextLingoTitle(),
-          Positioned(
-            top: 80,
-            left: 0,
-            right: 0,
-            child: Card(
-              margin: EdgeInsets.zero,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
-                ),
-              ),
+    return wordList.when(
+      data: (isData) => Scaffold(
+        body: Stack(
+          children: [
+            Positioned(
               child: Container(
-                height: MediaQuery.of(context).size.height,
-                child: Padding(
-                  padding: context.padding.low,
-                  child: wordList.when(
-                    data: (isData) {
-                      if (isData.isNotEmpty) {
-                        return ListView.builder(
-                          itemCount: isData.length,
-                          itemBuilder: (context, index) {
-                            final isdata = isData[index];
-                            return buildPadding(context, ref, isdata);
-                          },
-                        );
-                      } else {
-                        return Center(
-                          child: CustomTextWidget(
-                            text: 'No result found',
-                            fontsize: 24,
-                            color: Colors.pink,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        );
-                      }
-                    },
-                    error: (error, stackTrace) => Text('Hata: $error'),
-                    loading: () => SizedBox(
-                      child: Center(child: CircularProgressIndicator()),
-                      height: 70,
-                      width: 70,
+                  color: isDarkTheme ? Color(0xff072027) : AppColors.appBlue),
+            ),
+            Positioned(
+              top: 15,
+              left: context.general.mediaQuery.size.width * 0.75,
+              right: 0,
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.search,
+                      color: Colors.white,
                     ),
+                    onPressed: () {
+                      setState(() {
+                        showSearch(
+                          context: context,
+                          delegate: SearchWords(ref: ref, words: isData),
+                        );
+                      });
+                    },
+                  ),
+                  IconButton(
+                      onPressed: () => showDialog(
+                          context: context,
+                          builder: (BuildContext contex) => AlertDialog(
+                                title: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.align_horizontal_left,
+                                      color: Colors.black,
+                                    ),
+                                    SizedBox(
+                                      width: 4,
+                                    ),
+                                    Text(
+                                      "Kelime Sırala",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                content: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    TextButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            isData.sort((a, b) =>
+                                                a.word.compareTo(b.word));
+                                          });
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text("A-Z Sırala")),
+                                    TextButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            isData.sort((a, b) =>
+                                                b.word.compareTo(a.word));
+                                          });
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text("Z-A Sırala")),
+                                    TextButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            isData.sort((a, b) => b.addedDate!
+                                                .compareTo(a.addedDate!));
+                                          });
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text("Son eklenen başa")),
+                                    TextButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            isData.sort((a, b) => a.addedDate!
+                                                .compareTo(b.addedDate!));
+                                          });
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text("ilk eklenen başa"))
+                                  ],
+                                ),
+                              )),
+                      icon: Icon(Icons.more_vert))
+                ],
+              ),
+            ),
+            _AddWordIconButton(),
+            _TextLingoTitle(),
+            Positioned(
+              top: 80,
+              left: 0,
+              right: 0,
+              child: Card(
+                margin: EdgeInsets.zero,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                  ),
+                ),
+                child: Container(
+                  height: MediaQuery.of(context).size.height,
+                  child: Padding(
+                    padding: context.padding.low,
+                    child: isData.isNotEmpty
+                        ? ListView.builder(
+                            itemCount: isData.length,
+                            itemBuilder: (context, index) {
+                              final isdata = isData[index];
+                              return buildPadding(context, ref, isdata);
+                            },
+                          )
+                        : Center(
+                            child: CustomTextWidget(
+                              text: 'No result found',
+                              fontsize: 24,
+                              color: Colors.pink,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                   ),
                 ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
+      ),
+      error: (error, stackTrace) => Text('Hata: $error'),
+      loading: () => SizedBox(
+        child: Center(child: CircularProgressIndicator()),
+        height: 70,
+        width: 70,
       ),
     );
   }
