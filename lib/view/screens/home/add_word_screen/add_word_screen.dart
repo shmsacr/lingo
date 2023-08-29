@@ -140,6 +140,7 @@ class _AddWordState extends ConsumerState<AddWord> {
                   MaterialButton(
                     onPressed: () {
                       if (_formKey.currentState!.saveAndValidate()) {
+                        DateTime now = DateTime.now();
                         final Words words = Words.fromJson({
                           "word": _formKey.currentState!.value["word"],
                           "means": _formKey.currentState!.value["means"],
@@ -147,7 +148,8 @@ class _AddWordState extends ConsumerState<AddWord> {
                           "sentence": _formKey.currentState?.value["sentence"],
                           "id": widget.myWords?.id == null
                               ? uuid
-                              : widget.myWords!.id
+                              : widget.myWords!.id,
+                          "addedDate": now.toString()
                         });
 
                         try {
