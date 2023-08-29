@@ -17,6 +17,7 @@ class Words with _$Words {
     @HiveField(4) final String? spouse,
     @HiveField(5) final String? sentence,
     @Default(false) @HiveField(6) final bool isComplete,
+    @HiveField(7) final DateTime? addedDate,
   }) = _Words;
 
   factory Words.fromJson(Map<String, Object?> json) => _$WordsFromJson(json);
