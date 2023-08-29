@@ -26,7 +26,8 @@ class HiveLocalStroge extends LocalStroge {
     var retrievedWord = box.get(word.id);
     await box.close();
 
-    return (retrievedWord) ?? Words(id: '', word: '', means: '');
+    return (retrievedWord) ??
+        Words(id: '', word: '', means: '', addedDate: DateTime.now());
   }
 
   @override
