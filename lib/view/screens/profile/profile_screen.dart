@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lingo/view/theme/app_colors.dart';
 import 'package:lingo/view/widget/custom_text_widget.dart';
 
-import '../../../controller/theme_controller.dart';
+import '../../../controller/riverpod/settings_controller.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({
@@ -13,7 +13,7 @@ class ProfileScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    bool isDarkTheme = ref.watch(themeProvider);
+    bool isDarkTheme = ref.watch(settingProvider).themeMode;
     return Scaffold(
         body: Padding(
       padding: const EdgeInsets.all(20.0),
@@ -49,7 +49,7 @@ class ProfileScreen extends ConsumerWidget {
                   moonImage: AssetImage('assets/icons/moon.png'),
                   value: isDarkTheme,
                   onChanged: (value) {
-                    ref.read(themeProvider.notifier).toggleTheme();
+                    ref.read(settingProvider).toggleTheme();
                   },
                 ),
               )),
