@@ -70,7 +70,7 @@ class CustomAppTheme {
 
         ///appBarTheme
         appBarTheme: const AppBarTheme(
-          backgroundColor: AppColors.barColorDark,
+          backgroundColor: Color(0xff072027),
           iconTheme: IconThemeData(color: Colors.white),
           titleTextStyle: TextStyle(
             color: Colors.white,
