@@ -1,24 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:lingo/controller/riverpod/settings_controller.dart';
 import 'package:lingo/controller/routes/router.dart' as route;
-import 'package:lingo/data/services/local_storage.dart';
 import 'package:lingo/view/theme/custom_theme.dart';
 
-import 'controller/theme_controller.dart';
+import 'data/model/settings.dart';
 import 'data/model/word_model.dart';
-
-final locator = GetIt.instance;
-void setup() {
-  locator.registerSingleton<LocalStroge>(HiveLocalStroge());
-}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(WordsAdapter());
-  setup();
+  Hive.registerAdapter(SettingsAdapter());
+  await SettingsData().loadSettingHive();
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -29,12 +24,13 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(settingProvider).loadSettingHive();
+    bool themeMode = ref.watch(settingProvider).themeMode;
     return MaterialApp(
       initialRoute: route.Router.dashboard,
       onGenerateRoute: route.Router.generateRoute,
-      theme: ref.watch(themeProvider)
-          ? CustomAppTheme().themeDark
-          : CustomAppTheme().themeLight,
+      theme:
+          themeMode ? CustomAppTheme().themeDark : CustomAppTheme().themeLight,
       debugShowCheckedModeBanner: false,
     );
   }
