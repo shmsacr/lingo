@@ -23,12 +23,12 @@ class ProfileScreen extends ConsumerWidget {
             leading: CircleAvatar(
               backgroundColor: Colors.white,
               child: Icon(
-                Icons.person,
+                Icons.settings,
                 color: AppColors.appGeneralLigthGrey,
               ),
             ),
             title: CustomTextWidget(
-              text: 'İsim Soyisim',
+              text: 'Ayarlar',
               color: Colors.white,
             ),
           ),
@@ -48,7 +48,7 @@ class ProfileScreen extends ConsumerWidget {
                 child: DayNightSwitch(
                   moonImage: AssetImage('assets/icons/moon.png'),
                   value: isDarkTheme,
-                  onChanged: (value) {
+                  onChanged: (_) {
                     ref.read(settingProvider).toggleTheme();
                   },
                 ),
