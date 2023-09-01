@@ -17,13 +17,11 @@ class SettingsData with ChangeNotifier {
   }
 
   bool _themeMode = false;
-  bool _soundOn = false;
   bool _notification = false;
   int _fontSize = 0;
   int _sorting = 0;
 
   bool get themeMode => _themeMode;
-  bool get soundOn => _soundOn;
   bool get notification => _notification;
   int get fontSize => _fontSize;
   int get sorting => _sorting;
@@ -34,20 +32,6 @@ class SettingsData with ChangeNotifier {
         "themeMode",
         Settings(
             themeMode: _themeMode,
-            soundOn: _soundOn,
-            notification: _notification,
-            fontSize: _fontSize,
-            sorting: _sorting));
-    notifyListeners();
-  }
-
-  void toggleSound() async {
-    _soundOn = !_soundOn;
-    await updateSetting(
-        "soundOn",
-        Settings(
-            themeMode: _themeMode,
-            soundOn: _soundOn,
             notification: _notification,
             fontSize: _fontSize,
             sorting: _sorting));
@@ -60,7 +44,6 @@ class SettingsData with ChangeNotifier {
         "notification",
         Settings(
             themeMode: _themeMode,
-            soundOn: _soundOn,
             notification: _notification,
             fontSize: _fontSize,
             sorting: _sorting));
@@ -73,7 +56,6 @@ class SettingsData with ChangeNotifier {
         "fontSize",
         Settings(
             themeMode: _themeMode,
-            soundOn: _soundOn,
             notification: _notification,
             fontSize: _fontSize,
             sorting: _sorting));
@@ -86,7 +68,6 @@ class SettingsData with ChangeNotifier {
         "sorting",
         Settings(
             themeMode: _themeMode,
-            soundOn: _soundOn,
             notification: _notification,
             fontSize: _fontSize,
             sorting: _sorting));
@@ -102,7 +83,6 @@ class SettingsData with ChangeNotifier {
   Future<void> loadSettingHive() async {
     await openBox();
     _themeMode = await _settings.get("themeMode")?.themeMode ?? false;
-    _soundOn = await _settings.get("soundOn")?.soundOn ?? false;
     _notification = await _settings.get("notification")?.notification ?? false;
     _fontSize = await _settings.get("fontSize")?.fontSize ?? 0;
     _sorting = await _settings.get("sorting")?.sorting ?? 0;
