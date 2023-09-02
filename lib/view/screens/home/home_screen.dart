@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -6,6 +7,7 @@ import 'package:lingo/controller/riverpod/search_delegate.dart';
 import 'package:lingo/controller/riverpod/search_text_field.controller.dart';
 import 'package:lingo/controller/riverpod/settings_controller.dart';
 import 'package:lingo/controller/riverpod/speaker_controller.dart';
+import 'package:lingo/controller/router/auto_router_controller.dart';
 import 'package:lingo/view/screens/home/add_word_screen/add_word_screen.dart';
 import 'package:lingo/view/theme/app_colors.dart';
 
@@ -13,6 +15,7 @@ import '../../../controller/riverpod/db_controller.dart';
 import '../../../data/model/word_model.dart';
 import '../../widget/custom_text_widget.dart';
 
+@RoutePage()
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
@@ -67,7 +70,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         setState(() {
                           showSearch(
                             context: context,
-                            delegate: SearchWords(ref: ref, words: isData),
+                            delegate: SearchWordScreen(ref: ref, words: isData),
                           );
                         });
                       },
@@ -205,8 +208,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             onPressed: (context) {
               Navigator.push(
                 context,
-                MaterialPageRoute<AddWord>(
-                  builder: (context) => AddWord(
+                MaterialPageRoute<AddWordScreen>(
+                  builder: (context) => AddWordScreen(
                     myWords: isdata,
                   ),
                 ),
@@ -416,7 +419,7 @@ class _AddWordIconButton extends StatelessWidget {
       child: IconButton(
         icon: Icon(Icons.add, color: Colors.white),
         onPressed: () {
-          Navigator.pushNamed(context, '/addWord');
+          context.router.push(AddWordScreenRoute());
         },
       ),
     );
