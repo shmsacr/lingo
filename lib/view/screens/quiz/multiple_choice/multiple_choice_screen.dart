@@ -1,3 +1,4 @@
+import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kartal/kartal.dart';
@@ -5,8 +6,8 @@ import 'package:lingo/controller/riverpod/multiple_choice_controller.dart';
 import 'package:lingo/view/theme/app_colors.dart';
 import 'package:lingo/view/widget/custom_text_widget.dart';
 
-@immutable
-final class MultipleChoiceScreen extends ConsumerStatefulWidget {
+@RoutePage()
+class MultipleChoiceScreen extends ConsumerStatefulWidget {
   const MultipleChoiceScreen({super.key});
 
   @override
