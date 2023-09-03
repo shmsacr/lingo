@@ -1,3 +1,4 @@
+import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,9 +12,10 @@ import 'package:uuid/uuid.dart';
 
 import '../../../../data/model/word_model.dart';
 
-class AddWord extends ConsumerStatefulWidget {
+@RoutePage()
+class AddWordScreen extends ConsumerStatefulWidget {
   final Words? myWords;
-  const AddWord({
+  const AddWordScreen({
     this.myWords,
     Key? key,
   }) : super(key: key);
@@ -22,7 +24,7 @@ class AddWord extends ConsumerStatefulWidget {
   ConsumerState createState() => _AddWordState();
 }
 
-class _AddWordState extends ConsumerState<AddWord> {
+class _AddWordState extends ConsumerState<AddWordScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   final uuid = Uuid().v1();
 
