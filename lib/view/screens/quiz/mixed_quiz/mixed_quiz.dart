@@ -1,16 +1,18 @@
+import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lingo/controller/riverpod/db_controller.dart';
 import 'package:lingo/controller/riverpod/mixed_quiz_controller.dart';
 
-class MixedQuiz extends ConsumerStatefulWidget {
-  const MixedQuiz({super.key});
+@RoutePage()
+class MixedQuizScreen extends ConsumerStatefulWidget {
+  const MixedQuizScreen({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MixedQuizState();
 }
 
-class _MixedQuizState extends ConsumerState<MixedQuiz> {
+class _MixedQuizState extends ConsumerState<MixedQuizScreen> {
   int _currentIndex = 0;
 
   @override
