@@ -26,7 +26,7 @@ class Router {
       case '/':
         return MaterialPageRoute(builder: (_) => const DashboardScreen());
       case '/addWord':
-        return MaterialPageRoute(builder: (_) => const AddWord());
+        return MaterialPageRoute(builder: (_) => const AddWordScreen());
       case '/home':
         return MaterialPageRoute(builder: (_) => const HomeScreen());
 
@@ -49,7 +49,7 @@ class Router {
         return MaterialPageRoute(builder: (_) => const ListeningScreen());
 
       case '/mixedQuiz':
-        return MaterialPageRoute(builder: (_) => const MixedQuiz());
+        return MaterialPageRoute(builder: (_) => const MixedQuizScreen());
 
       default:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
