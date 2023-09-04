@@ -1,3 +1,4 @@
+import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kartal/kartal.dart';
@@ -7,6 +8,7 @@ import 'package:lingo/view/screens/quiz/mixin/QuizScreenMixin.dart';
 import 'package:lingo/view/theme/app_colors.dart';
 import 'package:lingo/view/widget/custom_text_widget.dart';
 
+@RoutePage()
 class QuizScreen extends ConsumerStatefulWidget with QuizScreenMixin {
   const QuizScreen({super.key});
 
