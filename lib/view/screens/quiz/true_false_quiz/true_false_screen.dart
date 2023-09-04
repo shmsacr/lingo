@@ -1,3 +1,4 @@
+import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kartal/kartal.dart';
@@ -8,6 +9,7 @@ import 'package:lingo/view/widget/custom_text_widget.dart';
 import '../../../../controller/riverpod/timer_controller.dart';
 import '../../../../controller/riverpod/true_false_controller.dart';
 
+@RoutePage()
 class TrueFalseScreen extends ConsumerStatefulWidget {
   const TrueFalseScreen({
     Key? key,
@@ -63,7 +65,6 @@ class _TrueFalseScreenState extends ConsumerState<TrueFalseScreen> {
     final cardColor = ref.watch(cardColorProvider.notifier);
     final textColor = ref.watch(textColorProvider.notifier);
     final score = ref.watch(scoreProvider.notifier);
-    final timerValue = ref.watch(timerProvider);
     final stopwatchValue = ref.watch(stopwatchProvider);
     final formattedValue = _formatDuration(stopwatchValue);
     final startStop = ref.watch(startStopProivder);
