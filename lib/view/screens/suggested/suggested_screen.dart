@@ -1,3 +1,4 @@
+import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kartal/kartal.dart';
@@ -6,6 +7,7 @@ import 'package:lingo/controller/riverpod/suggested_words_controller.dart';
 import 'package:lingo/view/theme/app_colors.dart';
 import 'package:lingo/view/widget/custom_text_widget.dart';
 
+@RoutePage()
 class SuggestedScreen extends ConsumerStatefulWidget {
   const SuggestedScreen({super.key});
 
