@@ -46,5 +46,10 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: QuizScreenRoute.page),
         AutoRoute(page: ProfileScreenRoute.page),
         AutoRoute(page: AddWordScreenRoute.page),
+        AutoRoute(page: MultipleChoiceScreenRoute.page),
+        AutoRoute(page: TrueFalseScreenRoute.page),
+        AutoRoute(page: WritingExercisesScreenRoute.page),
+        AutoRoute(page: ListeningScreenRoute.page),
+        AutoRoute(page: SuggestedScreenRoute.page)
       ];
 }
