@@ -1,10 +1,10 @@
-import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:lingo/controller/riverpod/db_controller.dart';
-import 'package:lingo/view/screens/suggested/suggested_screen.dart';
+import 'package:lingo/controller/router/auto_router_controller.dart';
 import 'package:lingo/view/theme/app_colors.dart';
 import 'package:lingo/view/widget/custom_text_widget.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -42,11 +42,7 @@ class _AddWordState extends ConsumerState<AddWordScreen> {
         actions: [
           TextButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute<Widget>(
-                      builder: (context) => SuggestedScreen(),
-                    ));
+                context.router.push(SuggestedScreenRoute());
               },
               child: CustomTextWidget(
                 text: 'Kelime Önerileri',
