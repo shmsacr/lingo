@@ -10,10 +10,10 @@ import 'package:lingo/view/widget/custom_text_widget.dart';
 import '../../view/screens/home/add_word_screen/add_word_screen.dart';
 import 'db_controller.dart';
 
-class SearchWords extends SearchDelegate<Words> {
+class SearchWordScreen extends SearchDelegate<Words> {
   final WidgetRef ref;
   final List<Words> words;
-  SearchWords({required this.ref, required this.words});
+  SearchWordScreen({required this.ref, required this.words});
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -79,8 +79,8 @@ class SearchWords extends SearchDelegate<Words> {
                   onPressed: (context) {
                     Navigator.push(
                       context,
-                      MaterialPageRoute<AddWord>(
-                        builder: (context) => AddWord(
+                      MaterialPageRoute<AddWordScreen>(
+                        builder: (context) => AddWordScreen(
                           myWords: isdata,
                         ),
                       ),
@@ -162,8 +162,8 @@ class SearchWords extends SearchDelegate<Words> {
                   onPressed: (context) {
                     Navigator.push(
                       context,
-                      MaterialPageRoute<AddWord>(
-                        builder: (context) => AddWord(
+                      MaterialPageRoute<AddWordScreen>(
+                        builder: (context) => AddWordScreen(
                           myWords: isdata,
                         ),
                       ),
