@@ -16,7 +16,7 @@ class SuggestedService {
     final suggestedWord = jsonParsed['suggestedWord'] as List<dynamic>;
 
     List<SuggestedWord> suggestedWordList = [];
-    
+
     for (var word in suggestedWord) {
       suggestedWordList
           .add(SuggestedWord.fromJson(word as Map<String, dynamic>));
@@ -24,5 +24,14 @@ class SuggestedService {
     print('suggestedWordList ${suggestedWordList}');
 
     return suggestedWordList;
+  }
+
+  Future<void> deleteSuggestedWord(int? wordId) async {
+    final jsonString = await _loadAsset();
+    final jsonParsed = json.decode(jsonString);
+    final suggestedWord = jsonParsed['suggestedWord'] as List<dynamic>;
+    suggestedWord.removeWhere((element) => element["id"] == wordId);
+    json.encode(jsonParsed);
+    fetchSuggestedWord();
   }
 }
