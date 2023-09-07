@@ -1,6 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lingo/controller/riverpod/db_controller.dart';
+import 'package:lingo/controller/router/auto_router_controller.dart';
 import 'package:lingo/core/const/string_const.dart';
 import 'package:lingo/core/enums/image_enums.dart';
 import 'package:lingo/data/model/word_model.dart';
@@ -23,31 +25,31 @@ mixin QuizScreenMixin {
 
 void pushToSelectScreenQuiz(BuildContext context, int index, WidgetRef ref) {
   final List<Words>? _allWord = ref.read(wordsProvider).value;
-
-  switch (index) {
-    case 0:
-      (_allWord?.length ?? 0) < 5
-          ? {
-              ScaffoldMessenger.of(context).clearSnackBars(),
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  duration: const Duration(seconds: 2),
-                  content: Text(
-                      "5 kelime öğrenmeden test çözemezsiniz. ${_allWord!.length} tane kelime öğrendiniz"),
-                ),
-              )
-            }
-          : Navigator.pushNamed(context, '/multipleChoice');
-      break;
-    case 1:
-      Navigator.pushNamed(context, '/trueFalse');
-      break;
-    case 2:
-      Navigator.pushNamed(context, '/writePage');
-      break;
-    case 3:
-      Navigator.pushNamed(context, '/listening');
-      break;
+  if (_allWord!.length < 5) {
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 2),
+        content: Text(
+            "5 kelime öğrenmeden test çözemezsiniz. ${_allWord!.length} tane kelime öğrendiniz"),
+      ),
+    );
+  } else {
+    switch (index) {
+      case 0:
+        context.router.push(MultipleChoiceScreenRoute());
+        break;
+      case 1:
+        context.router.push(TrueFalseScreenRoute());
+        break;
+      case 2:
+        context.router.push(WritingExercisesScreenRoute());
+        break;
+      case 3:
+        context.router.push(ListeningScreenRoute());
+        break;
+    }
+    ;
   }
 }
 
