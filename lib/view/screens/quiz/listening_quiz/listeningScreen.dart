@@ -1,3 +1,4 @@
+import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -6,6 +7,7 @@ import '../../../../controller/riverpod/writing_exercise_controller.dart';
 import '../../../theme/app_colors.dart';
 import '../../../widget/custom_text_widget.dart';
 
+@RoutePage()
 class ListeningScreen extends ConsumerStatefulWidget {
   const ListeningScreen({
     Key? key,
