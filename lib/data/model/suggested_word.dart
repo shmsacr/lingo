@@ -1,5 +1,6 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 part 'suggested_word.freezed.dart';
 part 'suggested_word.g.dart';
 
@@ -9,8 +10,8 @@ class SuggestedWord with _$SuggestedWord {
   const factory SuggestedWord({
     int? id,
     int? categoryId,
-    String? eng,
-    String? tr,
+    String? ENG,
+    String? TR,
   }) = _SuggestedWord;
 
   factory SuggestedWord.fromJson(Map<String, dynamic> json) =>
