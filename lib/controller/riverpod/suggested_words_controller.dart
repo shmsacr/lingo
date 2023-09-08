@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:lingo/data/model/suggested_word.dart';
 import 'package:lingo/data/services/suggested_service.dart';
 
@@ -23,21 +22,20 @@ class SuggestedWordsNotifier extends StateNotifier<SuggestedState> {
     final getSuggested = await SuggestedService().fetchSuggestedWord();
     final shuffledList = List<SuggestedWord>.from(getSuggested)..shuffle();
     final randomWords = shuffledList.take(30).toList();
-    state = state.copyWith(suggestedWords: randomWords);
+    _suggestedWords?.addAll(randomWords);
+    state = state.copyWith(suggestedWords: _suggestedWords);
     print(randomWords.length);
 
     state = state.copyWith(isLoading: false);
   }
 
-  // Future<List<SuggestedWord>> wordNumberFiltering() {
-  //   if (_suggestedWords!.isEmpty && _suggestedWords?.length == 0) {
-  //     return Future.value(_suggestedWords!);
-  //   } else {
-  //     final randomWord =
-  //         _suggestedWords![_random.nextInt(_suggestedWords!.length)];
-  //     return Future.value([randomWord]);
-  //   }
-  // }
+  void deleteSuggestedWord(int? wordId) async {
+    final updatedWord = await _suggestedWords
+        ?.where((element) => element.id != wordId)
+        .toList();
+    await SuggestedService().deleteSuggestedWord(wordId);
+    state = state.copyWith(suggestedWords: updatedWord);
+  }
 }
 
 class SuggestedState {
