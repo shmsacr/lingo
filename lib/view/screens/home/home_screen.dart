@@ -35,10 +35,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       data: (isData) {
         switch (sortingWords) {
           case 1:
-            isData.sort((a, b) => a.word.compareTo(b.word));
+            isData.sort(
+                (a, b) => a.word.toLowerCase().compareTo(b.word.toLowerCase()));
             break;
           case 2:
-            isData.sort((a, b) => b.word.compareTo(a.word));
+            isData.sort(
+                (a, b) => b.word.toLowerCase().compareTo(a.word.toLowerCase()));
             break;
           case 3:
             isData.sort((a, b) => b.addedDate!.compareTo(a.addedDate!));
