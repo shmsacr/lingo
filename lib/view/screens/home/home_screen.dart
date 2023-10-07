@@ -28,8 +28,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final wordList = ref.watch(wordsProvider);
-    bool isDarkTheme = ref.watch(settingProvider).themeMode;
-    int sortingWords = ref.watch(settingProvider).sorting;
+    final bool isDarkTheme = ref.watch(settingProvider).themeMode;
+    final int sortingWords = ref.watch(settingProvider).sorting;
     print("TEHEEMEMEMEMEMEM $isDarkTheme");
     return wordList.when(
       data: (isData) {
