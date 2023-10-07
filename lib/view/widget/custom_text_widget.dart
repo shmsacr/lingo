@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kartal/kartal.dart';
 
-class CustomTextWidget extends StatelessWidget {
+import '../../controller/riverpod/settings_controller.dart';
+
+class CustomTextWidget extends ConsumerWidget {
   const CustomTextWidget(
       {required this.text,
       super.key,
@@ -14,16 +17,15 @@ class CustomTextWidget extends StatelessWidget {
   final Color? color;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    bool _themeMode = ref.watch(settingProvider).themeMode;
+
     return Text(
       text,
       style: TextStyle(
           fontSize: fontsize ?? context.general.textTheme.titleLarge?.fontSize,
           fontWeight: fontWeight ?? FontWeight.w600,
-          color: color ??
-              (context.general.appBrightness == Brightness.dark
-                  ? Colors.red
-                  : Color(0xFF0081A8).withOpacity(0.8))),
+          color: _themeMode ? Colors.white : Colors.black),
     );
   }
 }
