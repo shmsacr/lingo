@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:lingo/controller/riverpod/settings_controller.dart';
 import 'package:lingo/controller/router/auto_router_controller.dart';
+import 'package:lingo/view/screens/dashboard.dart';
 import 'package:lingo/view/theme/custom_theme.dart';
 
 import 'data/model/settings.dart';
@@ -32,6 +33,19 @@ class MyApp extends ConsumerWidget {
       theme:
           themeMode ? CustomAppTheme().themeDark : CustomAppTheme().themeLight,
       debugShowCheckedModeBanner: false,
+      builder: (_, router) {
+        return Navigator(
+          pages: [
+            MaterialPage(
+              child: Scaffold(
+                body: router,
+                bottomNavigationBar: DashboardScreen(),
+              ),
+            ),
+          ],
+          onPopPage: (route, result) => route.didPop(result),
+        );
+      },
     );
   }
 }
