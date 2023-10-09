@@ -19,7 +19,7 @@ class DashboardScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final index = ref.watch(dashboardIndexProvider);
+    final index = ref.watch(dashboardIndexProvider.notifier).state;
     print(index);
     return BottomNavigationBar(
         iconSize: 30,
