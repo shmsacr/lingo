@@ -34,7 +34,6 @@ class AppRouter extends _$AppRouter {
                 extendBody: true,
                 extendBodyBehindAppBar: true,
                 body: child,
-                bottomNavigationBar: DashboardScreen(),
               ),
             ),
           );
